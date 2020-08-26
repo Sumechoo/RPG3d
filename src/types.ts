@@ -5,8 +5,15 @@ export interface Level {
     configs: Record<string, Array<TileConfig>>;
 }
 
+export enum TileFormat {
+    BLOCK,
+    SPRITE,
+}
+
 export interface TileConfig {
     isWalkable?: boolean;
     yShift?: number;
     texture?: keyof typeof IMAGE_ASSETS;
+    format?: TileFormat;
+    size?: number;
 }

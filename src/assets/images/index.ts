@@ -4,18 +4,27 @@ import floor_wood from './floor_wood.jpg';
 import brick_wall from './brick_wall.jpg';
 import window_old from './window_old.jpg';
 import bodia from './bodia.jpg';
+import grass from './grass.jpeg';
+import tall_grass from './tall_grass.png';
+import tree from './tree.png';
 import asphalt from './asphalt.jpg';
-import { TextureLoader, MeshBasicMaterial } from 'three';
+import { TextureLoader, MeshStandardMaterial, SpriteMaterial } from 'three';
 
 const loader = new TextureLoader();
 
 const createTexture = (t: string, transparent = false) => {
     const texture = loader.load(t);
 
-    return new MeshBasicMaterial({
+    return new MeshStandardMaterial({
         map: texture,
         transparent,
     });
+}
+
+const createSprite = (t: string) => {
+    const texture = loader.load(t);
+
+    return new SpriteMaterial({map: texture, transparent: true});
 }
 
 export const IMAGE_ASSETS = {
@@ -25,5 +34,9 @@ export const IMAGE_ASSETS = {
     'floor_wood': createTexture(floor_wood),
     'window_old': createTexture(window_old),
     'bodia': createTexture(bodia),
+    'grass': createTexture(grass),
     'asphalt': createTexture(asphalt),
+
+    'tree': createSprite(tree),
+    'tall_grass': createSprite(tall_grass),
 }

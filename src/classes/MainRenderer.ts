@@ -1,11 +1,12 @@
-import { WebGL1Renderer, Scene, FogExp2, Object3D, PerspectiveCamera, Vector3, Quaternion } from "three";
+import { WebGL1Renderer, Scene, FogExp2, Object3D, PerspectiveCamera, Vector3, Quaternion, DirectionalLight, AmbientLight } from "three";
 import { ItemsMap } from "../levels/Items";
 import { LevelBuilder } from "./LevelBuilder";
 import { approxVector3 } from "./utils";
+import { DEMO_LEVEL } from "../levels/DEMO";
 
 const dummy = new Vector3();
 
-const level = ItemsMap;
+const level = DEMO_LEVEL;
 
 export class MainRenderer extends WebGL1Renderer {
   private _scene: Scene;
@@ -16,12 +17,20 @@ export class MainRenderer extends WebGL1Renderer {
     super();
 
     this._scene = new Scene();
-    this._scene.fog = new FogExp2(0, 0.1);
+    this._scene.fog = new FogExp2(0x999999, 0.1);
 
     this._camera.position.z = 5;
     this._camera.position.x = 2;
 
+    this.setClearColor(0xaaaaaa);
+
     this.add(this._camera);
+
+    const sun = new DirectionalLight(0xaaaaaa, 0.4);
+
+    sun.position.add(new Vector3(1,0,0));
+
+    this.add(sun, new AmbientLight(0x888888, 1));
 
     new LevelBuilder(level, this);
   }
