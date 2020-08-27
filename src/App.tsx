@@ -4,7 +4,7 @@ import { MainRenderer } from "./classes/MainRenderer";
 
 const renderer = new MainRenderer();
 
-renderer.setSize(1200, 600);
+renderer.setSize(window.innerWidth, window.innerHeight);
 
 function animate() {
   requestAnimationFrame(animate);

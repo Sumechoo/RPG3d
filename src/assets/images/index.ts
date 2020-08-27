@@ -3,11 +3,14 @@ import floor_stone from './floor_stone.png';
 import floor_wood from './floor_wood.jpg';
 import brick_wall from './brick_wall.jpg';
 import window_old from './window_old.jpg';
-import bodia from './bodia.jpg';
 import grass from './grass.jpeg';
 import tall_grass from './tall_grass.png';
 import tree from './tree.png';
+import fence from './fence.png';
+import angel from './angel.png';
+import beton_wall from './beton_wall.png';
 import asphalt from './asphalt.jpg';
+import lep from './lep.png';
 import { TextureLoader, MeshStandardMaterial, SpriteMaterial } from 'three';
 
 const loader = new TextureLoader();
@@ -33,10 +36,13 @@ export const IMAGE_ASSETS = {
     'brick_wall': createTexture(brick_wall),
     'floor_wood': createTexture(floor_wood),
     'window_old': createTexture(window_old),
-    'bodia': createTexture(bodia),
     'grass': createTexture(grass),
     'asphalt': createTexture(asphalt),
+    'beton_wall': createTexture(beton_wall),
 
     'tree': createSprite(tree),
+    'angel': createSprite(angel),
+    'lep': createSprite(lep),
+    'fence': createSprite(fence),
     'tall_grass': createSprite(tall_grass),
 }

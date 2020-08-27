@@ -36,10 +36,6 @@ export const ItemsMap: Level = {
         'R': [
             {}, {}, {}, {}, {}, {}
         ],
-        'B': [
-            {texture: 'bodia'},
-            {texture: 'bodia'},
-        ],
         '2': [
             {texture: 'brick_wall'},
             {texture: 'brick_wall'},
