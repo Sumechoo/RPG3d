@@ -1,8 +1,13 @@
 import { IMAGE_ASSETS } from "./assets/images";
 
+export interface PartConfig {
+    includes?: Array<string>;
+    tileConfig: Array<TileConfig>;
+}
+
 export interface Level {
     map: string;
-    configs: Record<string, Array<TileConfig>>;
+    configs: Record<string, PartConfig>;
 }
 
 export enum TileFormat {

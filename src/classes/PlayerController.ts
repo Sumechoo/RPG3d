@@ -1,4 +1,4 @@
-import { Object3D, PerspectiveCamera, Vector3 } from "three";
+import { Object3D, PerspectiveCamera, Vec2, Vector3 } from "three";
 import { degToRad } from "./utils";
 import { LevelBuilder } from "./LevelBuilder";
 
@@ -30,6 +30,10 @@ export class PlayerController extends Object3D {
         });
 
         this.add(this._camera);
+    }
+
+    public setPosition({x, y}: Vec2) {
+        this.position.set(x, this.position.y, y);
     }
 
     public getCamera() {

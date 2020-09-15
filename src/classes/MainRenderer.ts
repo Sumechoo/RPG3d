@@ -1,4 +1,4 @@
-import { WebGL1Renderer, Scene, FogExp2, Object3D, PerspectiveCamera, Vector3, Quaternion, DirectionalLight, AmbientLight } from "three";
+import { WebGL1Renderer, Scene, FogExp2, Object3D, PerspectiveCamera, Vector3, DirectionalLight, AmbientLight } from "three";
 import { LevelBuilder } from "./LevelBuilder";
 import { approxVector3 } from "./utils";
 import { DEMO_LEVEL } from "../levels/DEMO";
