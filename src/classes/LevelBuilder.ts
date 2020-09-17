@@ -2,11 +2,12 @@ import { Level, TileConfig, TileFormat } from "../types";
 import { MainRenderer } from "./MainRenderer";
 import { PlayerController } from "./PlayerController";
 import { Block } from "./Block";
-import { Vector3, SpriteMaterial } from "three";
+import { Vector3, SpriteMaterial, Object3D } from "three";
 import { IMAGE_ASSETS } from "../assets/images";
 import { getInMatrix, setInMatrix, matrixToNodes } from "./utils";
 import { Sprite } from "./Sprite";
 import { PathFinder, PathNode } from "./PathFinder";
+import { Creature } from "./Creature";
 
 export class LevelBuilder {
     private _walkableMatrix: boolean[][] = [];
@@ -61,24 +62,28 @@ export class LevelBuilder {
 
         this._pathFinder = new PathFinder(matrixToNodes(this._walkableMatrix));
 
+        // test path folowing
         const path = this._pathFinder.getPath({x: 9, y: 8}, {x: 25, y: 60});
 
-        // path.forEach(({position}) => renderer.add(new Sprite(new Vector3(position.x, 0, position.y), IMAGE_ASSETS.arrow, 0.3)));
+        const creatureBody = new Sprite(new Vector3(), IMAGE_ASSETS.arrow);
+        const testCreature = new Creature({
+            body: creatureBody,
+        });
 
-        // console.time('PATH');
-        this.EXP_movePlayerByPath(player, path);
+        renderer.add(creatureBody);
+        renderer.addAnimated(testCreature);
+
+        this.EXP_moveCreatureByPath(testCreature, path);
     }
 
-    private EXP_movePlayerByPath = (player: PlayerController, path: PathNode[]) => {
+    private EXP_moveCreatureByPath = (obj: Creature, path: PathNode[]) => {
         if(path.length === 1) {
-            console.timeEnd('PATH');
-
             return;
         }
 
-        player.setPosition(path[0].position);
+        obj.setPosition(path[0].position);
 
-        setTimeout(() => this.EXP_movePlayerByPath(player, [...path].splice(1, path.length)), 300);
+        setTimeout(() => this.EXP_moveCreatureByPath(obj, [...path].splice(1, path.length)), 300);
     } 
 
     public isTileWalkable(x: number, y: number) {

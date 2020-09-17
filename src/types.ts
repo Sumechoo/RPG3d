@@ -22,3 +22,7 @@ export interface TileConfig {
     format?: TileFormat;
     size?: number;
 }
+
+export interface IAnimated {
+    animate: VoidFunction;
+}

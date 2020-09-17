@@ -11,21 +11,21 @@ export const DEMO_LEVEL: Level = {
     TT  w_____________________T_______________________________w
     T   w_____________T_______________________________________w   T
     T wwwf_fffffffffffff_fffffffffffffffffffffffffffffffffffffwwww
-     wAA@AAAAfAAAAAAAAAAAfAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwT
-     wAAAAAAAfAAAAAAAAAAAfAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAw
-     TwwwfffffwwwwAAAAAAAf____________________________________wwww
-    T   w_____w  wfffAffff____________________________________wBBBBB
-     T  w__T__wwww___Af_______________________________________wBww
-     T  w____________Af________________________________________B_w
-     T  w____________Af______________T_______T_________________B_w
-    TT  w____________Af____________T_TT_T_WfffffffffW_T________BBBBB
+     wAAAAAAAfAAAAAAAAAAAfAAAAAAAAAAAAAAAAAfAAAAAAAAAAAAAAAAAAAAAAwT
+     wAAAAAAAfAAAAAAAAAAAfAAAAAAAAAAAAAAAAAfAAAAAAAAAAAAAAAAAAAAAAw
+     TwwwfffffwwwwAAAAAAAf_________________f__________________wwww
+    T   w_____w  wfffAffff_________________f__________________wBBBBB
+     T  w__T__wwww___Af____________________f__________________wBww
+     T  w____________Af____________________f___________________B_w
+     T  w____________Af______________T_____f_T_________________B_w
+    TT  w____________Af____________T_TT_T_Wffff_ffffW_T________BBBBB
     T   w_______T_T__Af____T______________fAAAAAABBBf____________w  T
      T  w___T__T___T_Af___________________fAAAAAB  Bf____________w   T
-     wwww____________Af___________________fAAAAAB  BfT___________w    T
+     wwww____________Af_________@_________fAAAAAB  BfT___________w    T
      wAAAAAAAAAAAAAAAAf___________________fAAAAAB  Bf____________w
      wwww__________wwwwww_________________fAAAAAB  Bf____________w 
      T  w___T______f________________T_T___fAAAAAABBBf____________w
-    T   w_____T____f____f_________________WfffffffffW___________w
+    T   w_____T____f____f_________________Wff_ffffffW___________w
      T  w__________f____f______________________f________________w  T
      T  w_______________f______________________f________________w  T
         wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww

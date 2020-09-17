@@ -12,12 +12,13 @@ import beton_wall from './beton_wall.png';
 import asphalt from './asphalt.jpg';
 import lep from './lep.png';
 import arrow from './arrow.png';
-import { TextureLoader, MeshStandardMaterial, SpriteMaterial } from 'three';
+import { TextureLoader, MeshStandardMaterial, SpriteMaterial, NearestFilter } from 'three';
 
 const loader = new TextureLoader();
 
 const createTexture = (t: string, transparent = false) => {
     const texture = loader.load(t);
+    texture.magFilter = NearestFilter;
 
     return new MeshStandardMaterial({
         map: texture,
@@ -27,6 +28,7 @@ const createTexture = (t: string, transparent = false) => {
 
 const createSprite = (t: string) => {
     const texture = loader.load(t);
+    texture.magFilter = NearestFilter;
 
     return new SpriteMaterial({map: texture, transparent: true});
 }
