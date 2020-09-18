@@ -1,5 +1,5 @@
 import { Level, TileFormat } from "../../types";
-import { Creature } from "../../classes/Creature";
+import {Cat} from '../../classes/mobs/Cat';
 
 export const DEMO_LEVEL: Level = {
     map: `
@@ -19,10 +19,10 @@ export const DEMO_LEVEL: Level = {
      T  w__T__wwww___Af____________________f__________________wBww
      T  w____________Af____________________f___________________B_w
      T  w____________Af______________T_____f_T_________________B_w
-    TT  w____________Af____________T_TT_T_Wffff_ffffW_T________BBBBB
+    TT  w___@________Af____________T_TT_T_Wffff_ffffW_T________BBBBB
     T   w_______T_T__Af____T______________fAAAAAABBBf____________w  T
      T  w___T__T___T_Af___________________fAAAAAB  Bf____________w   T
-     wwww____________Af_________@_________fAAAAAB  BfT___________w    T
+     wwww____________Af___________________fAAAAAB  BfT___________w    T
      wAAAAAAAAAAAAAAAAf___________________fAAAAAB  Bf____________w
      wwww__________wwwwww_________________fAAAAAB  Bf____________w 
      T  w___T______f________________T_T___fAAAAAABBBf____________w
@@ -38,17 +38,16 @@ export const DEMO_LEVEL: Level = {
     configs: {
         '@': {
             includes: ['A'],
-            spawns: Creature,
             tileConfig: [],
         },
         'w': {
             tileConfig: [
-                {texture: 'beton_wall'},
+                {texture: 'beton_wall', yShift: 1},
             ]
         },
         'L': {
             tileConfig: [
-                {texture: 'lep', size: 15, format: TileFormat.SPRITE, yShift: 5},
+                {texture: 'lep', size: 15, format: TileFormat.SPRITE, yShift: 4},
             ]
         },
         'W': {
@@ -60,24 +59,25 @@ export const DEMO_LEVEL: Level = {
         'f': {
             includes: ['_'],
             tileConfig: [
-                {yShift: -2, texture: 'fence', format: TileFormat.SPRITE, size: 1},
+                {yShift: -1, texture: 'fence', format: TileFormat.SPRITE, size: 1},
             ]
         },
         '_': {
             tileConfig: [
-                {isWalkable: true, texture: 'grass', yShift: -1},
-                {yShift: -1.3, isWalkable: true, texture: 'tall_grass', format: TileFormat.SPRITE, size: 1},
+                {isWalkable: true, texture: 'grass'},
+                {yShift: -0.3, isWalkable: true, texture: 'tall_grass', format: TileFormat.SPRITE, size: 1},
             ]
         },
         'T': {
             includes: ['_'],
             tileConfig: [
-                {texture: 'tree', yShift: 1.8, format: TileFormat.SPRITE, size: 10, isWalkable: true}
+                {texture: 'tree', yShift: 2.8, format: TileFormat.SPRITE, size: 10, isWalkable: true}
             ]
         },
         'A': {
+            spawns: Cat,
             tileConfig: [
-                {texture: 'asphalt', yShift: -0.95, isWalkable: true}
+                {texture: 'asphalt', yShift: 0.05, isWalkable: true}
             ]
         },
         'B': {

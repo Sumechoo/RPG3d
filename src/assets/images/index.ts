@@ -12,6 +12,7 @@ import beton_wall from './beton_wall.png';
 import asphalt from './asphalt.jpg';
 import lep from './lep.png';
 import arrow from './arrow.png';
+import cat from './cat.png';
 import { TextureLoader, MeshStandardMaterial, NearestFilter, SpriteMaterial } from 'three';
 
 const loader = new TextureLoader();
@@ -49,4 +50,5 @@ export const IMAGE_ASSETS = {
     'fence': createSprite(fence),
     'tall_grass': createSprite(tall_grass),
     'arrow': createSprite(arrow),
+    'cat': createSprite(cat),
 }

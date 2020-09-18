@@ -11,6 +11,7 @@ import { Creature } from "./Creature";
 
 export class LevelBuilder {
     private _walkableMatrix: boolean[][] = [];
+    private _positionsMatrix: boolean[][] = [];
 
     private readonly _pathFinder: PathFinder;
 
@@ -18,7 +19,7 @@ export class LevelBuilder {
         let x = 0;
         let y = 0;
 
-        const player = new PlayerController({level: this, position: {x: 0, y: 0}});
+        let player: PlayerController; 
 
         level.map.split('').forEach((item) => {
             y++;
@@ -28,8 +29,15 @@ export class LevelBuilder {
                     y = 0;
                     break;
                 case '@':
-                    player.position.x = x;
-                    player.position.z = y;
+                    player = new PlayerController({
+                        level: this,
+                        position: {x, y},
+                        positionMatrix: this._positionsMatrix,
+                    });
+
+                    renderer.add(player);
+                    renderer.addAnimated(player);
+                    renderer.setMainCamera(player.getCamera());
                 default:
                     const configs = level.configs[item];
 
@@ -42,15 +50,21 @@ export class LevelBuilder {
                         }
 
                         if(spawns) {
-                            const creature = new spawns({level: this, position: {x, y}});
+                            const creature = new spawns({
+                                level: this,
+                                position: {x, y},
+                                positionMatrix: this._positionsMatrix,
+                            });
                             creature.position.y = 2;
                             renderer.add(creature.getBody());
                             renderer.addAnimated(creature);
+
+                            setInMatrix(x, y, false, this._positionsMatrix);
                         }
 
                         [...configsToInclude, ...tileConfig]
                             .forEach(({yShift, texture, isWalkable, format, size}, index) => {
-                                const position = new Vector3(x, index + (yShift ?? 0), y);
+                                const position = new Vector3(x, index - 1 + (yShift ?? 0), y);
 
                                 if (format === TileFormat.SPRITE) {
                                     renderer.add(new Sprite(position, IMAGE_ASSETS[texture ?? 'tree'] as SpriteMaterial, size), )
@@ -64,24 +78,11 @@ export class LevelBuilder {
             }
         });
 
-        renderer.add(player);
-        renderer.addAnimated(player);
-        renderer.setMainCamera(player.getCamera());
-
         this._pathFinder = new PathFinder(matrixToNodes(this._walkableMatrix));
 
         // test path folowing
-        const path = this._pathFinder.getPath({x: 9, y: 8}, {x: 25, y: 60});
-
-        const testCreature = new Creature({
-            level: this,
-            position: {x: 0, y: 0},
-        });
-
-        renderer.add(testCreature.getBody());
-        renderer.addAnimated(testCreature);
-
-        this.EXP_moveCreatureByPath(testCreature, path);
+        // const path = this._pathFinder.getPath({x: 9, y: 8}, {x: 25, y: 60});
+        // this.EXP_moveCreatureByPath(testCreature, path);
     }
 
     private EXP_moveCreatureByPath = (obj: Creature, path: PathNode[]) => {
@@ -91,10 +92,18 @@ export class LevelBuilder {
 
         obj.setPosition(path[0].position);
 
-        setTimeout(() => this.EXP_moveCreatureByPath(obj, [...path].splice(1, path.length)), 300);
+        setTimeout(() => this.EXP_moveCreatureByPath(obj, [...path].splice(1, path.length)), 10);
     } 
 
-    public isTileWalkable(x: number, y: number) {
-        return getInMatrix(x, y, this._walkableMatrix);
+    public isTileWalkable(x: number, y: number, log = false) {
+        const positionFallback = getInMatrix(x, y, this._positionsMatrix);
+
+        if(log) {
+            console.log(positionFallback, getInMatrix(x, y, this._walkableMatrix));
+        }
+
+        return positionFallback === undefined 
+            ? getInMatrix(x, y, this._walkableMatrix)
+            : !(!getInMatrix(x, y, this._walkableMatrix) || !positionFallback);
     }
 }

@@ -1,6 +1,7 @@
 import { WebGL1Renderer, Scene, FogExp2, Object3D, PerspectiveCamera, Vector3, DirectionalLight, AmbientLight, Camera } from "three";
 import { LevelBuilder } from "./LevelBuilder";
 import { DEMO_LEVEL } from "../levels/DEMO";
+import { CatBarn } from "../levels/CatBarn";
 import { IAnimated } from "../types";
 
 const level = DEMO_LEVEL;

@@ -24,9 +24,7 @@ export class PlayerController extends Creature {
             if(event.key === 'a') this.rotateY(degToRad(90));
             if(event.key === 'd') this.rotateY(degToRad(-90));
 
-            if (this._currentLevel.isTileWalkable(newPositionCandidate.x, newPositionCandidate.z)) {
-                this.position.copy(newPositionCandidate);
-            }
+            this.setPosition({x: newPositionCandidate.x, y: newPositionCandidate.z}, false, true);
         });
 
         this._supportRotation = true;
