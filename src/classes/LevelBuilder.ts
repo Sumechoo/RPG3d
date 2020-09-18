@@ -2,7 +2,7 @@ import { Level, TileConfig, TileFormat } from "../types";
 import { MainRenderer } from "./MainRenderer";
 import { PlayerController } from "./PlayerController";
 import { Block } from "./Block";
-import { Vector3, SpriteMaterial, Object3D } from "three";
+import { Vector3, SpriteMaterial } from "three";
 import { IMAGE_ASSETS } from "../assets/images";
 import { getInMatrix, setInMatrix, matrixToNodes } from "./utils";
 import { Sprite } from "./Sprite";
@@ -18,7 +18,7 @@ export class LevelBuilder {
         let x = 0;
         let y = 0;
 
-        const player = new PlayerController(this);
+        const player = new PlayerController({level: this, position: {x: 0, y: 0}});
 
         level.map.split('').forEach((item) => {
             y++;
@@ -34,11 +34,18 @@ export class LevelBuilder {
                     const configs = level.configs[item];
 
                     if (configs) {
-                        const {tileConfig, includes} = configs;
+                        const {tileConfig, includes, spawns} = configs;
                         const configsToInclude: Array<TileConfig> = [];
 
                         if(includes) {
                             includes.forEach((id) => configsToInclude.push(...level.configs[id]?.tileConfig));
+                        }
+
+                        if(spawns) {
+                            const creature = new spawns({level: this, position: {x, y}});
+                            creature.position.y = 2;
+                            renderer.add(creature.getBody());
+                            renderer.addAnimated(creature);
                         }
 
                         [...configsToInclude, ...tileConfig]
@@ -58,19 +65,20 @@ export class LevelBuilder {
         });
 
         renderer.add(player);
-        renderer.setMainCameraTarget(player);
+        renderer.addAnimated(player);
+        renderer.setMainCamera(player.getCamera());
 
         this._pathFinder = new PathFinder(matrixToNodes(this._walkableMatrix));
 
         // test path folowing
         const path = this._pathFinder.getPath({x: 9, y: 8}, {x: 25, y: 60});
 
-        const creatureBody = new Sprite(new Vector3(), IMAGE_ASSETS.arrow);
         const testCreature = new Creature({
-            body: creatureBody,
+            level: this,
+            position: {x: 0, y: 0},
         });
 
-        renderer.add(creatureBody);
+        renderer.add(testCreature.getBody());
         renderer.addAnimated(testCreature);
 
         this.EXP_moveCreatureByPath(testCreature, path);

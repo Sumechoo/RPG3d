@@ -1,4 +1,5 @@
 import { Level, TileFormat } from "../../types";
+import { Creature } from "../../classes/Creature";
 
 export const DEMO_LEVEL: Level = {
     map: `
@@ -37,6 +38,7 @@ export const DEMO_LEVEL: Level = {
     configs: {
         '@': {
             includes: ['A'],
+            spawns: Creature,
             tileConfig: [],
         },
         'w': {

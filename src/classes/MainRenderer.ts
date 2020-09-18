@@ -1,6 +1,5 @@
-import { WebGL1Renderer, Scene, FogExp2, Object3D, PerspectiveCamera, Vector3, DirectionalLight, AmbientLight } from "three";
+import { WebGL1Renderer, Scene, FogExp2, Object3D, PerspectiveCamera, Vector3, DirectionalLight, AmbientLight, Camera } from "three";
 import { LevelBuilder } from "./LevelBuilder";
-import { approxVector3 } from "./utils";
 import { DEMO_LEVEL } from "../levels/DEMO";
 import { IAnimated } from "../types";
 
@@ -9,7 +8,6 @@ const level = DEMO_LEVEL;
 export class MainRenderer extends WebGL1Renderer {
   private _scene: Scene;
   private _camera = new PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-  private _cameraTarget?: Object3D;
 
   private _animateTargets: IAnimated[] = [];
 
@@ -43,16 +41,11 @@ export class MainRenderer extends WebGL1Renderer {
     this._animateTargets.push(target);
   }
 
-  public setMainCameraTarget(target: Object3D) {
-    this._cameraTarget = target;
+  public setMainCamera(camera: PerspectiveCamera) {
+    this._camera = camera;
   }
 
   public animate() {
-    if (this._cameraTarget) {
-      this._camera.rotation.copy(this._cameraTarget.rotation);
-      approxVector3(this._camera.position, this._cameraTarget.position, 6);
-    }
-
     this._animateTargets.forEach((target) => target.animate());
 
     this.render(this._scene, this._camera);

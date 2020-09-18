@@ -1,7 +1,9 @@
 import { IMAGE_ASSETS } from "./assets/images";
+import { Creature } from "./classes/Creature";
 
 export interface PartConfig {
     includes?: Array<string>;
+    spawns?: typeof Creature;
     tileConfig: Array<TileConfig>;
 }
 

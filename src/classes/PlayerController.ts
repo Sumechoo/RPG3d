@@ -1,17 +1,17 @@
-import { Object3D, PerspectiveCamera, Vec2, Vector3 } from "three";
+import { PerspectiveCamera, Vector3 } from "three";
 import { degToRad } from "./utils";
-import { LevelBuilder } from "./LevelBuilder";
+import { Creature, CreatureParams } from "./Creature";
 
 const forward = new Vector3();
 
-export class PlayerController extends Object3D {
-    private _camera = new PerspectiveCamera(75, 2/1, 0.1, 1000);
-    private _currentLevel: LevelBuilder;
+export class PlayerController extends Creature {
+    private _camera: PerspectiveCamera;
     
-    constructor(level: LevelBuilder) {
-        super();
+    constructor(params: CreatureParams) {
+        const camera = new PerspectiveCamera(75, 2/1, 0.1, 1000);
+        super({...params, body: camera});
 
-        this._currentLevel = level;
+        this._camera = camera;
 
         document.addEventListener('keydown', (event) => {
             this._camera.getWorldDirection(forward);
@@ -29,11 +29,7 @@ export class PlayerController extends Object3D {
             }
         });
 
-        this.add(this._camera);
-    }
-
-    public setPosition({x, y}: Vec2) {
-        this.position.set(x, this.position.y, y);
+        this._supportRotation = true;
     }
 
     public getCamera() {

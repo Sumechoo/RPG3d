@@ -1,7 +1,7 @@
 import {Sprite as SpriteParent, Object3D, Vector3, SpriteMaterial} from 'three';
 
 export class Sprite extends Object3D {    
-    constructor(position: Vector3, texture: SpriteMaterial, size = 2) {
+    constructor(position: Vector3, texture: SpriteMaterial, size = 1) {
         super();
 
         const sprite = new SpriteParent(texture);
