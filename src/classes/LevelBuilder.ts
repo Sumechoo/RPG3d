@@ -32,7 +32,6 @@ export class LevelBuilder {
                     player = new PlayerController({
                         level: this,
                         position: {x, y},
-                        positionMatrix: this._positionsMatrix,
                     });
 
                     renderer.add(player);
@@ -53,13 +52,10 @@ export class LevelBuilder {
                             const creature = new spawns({
                                 level: this,
                                 position: {x, y},
-                                positionMatrix: this._positionsMatrix,
                             });
                             creature.position.y = 2;
                             renderer.add(creature.getBody());
                             renderer.addAnimated(creature);
-
-                            setInMatrix(x, y, false, this._positionsMatrix);
                         }
 
                         [...configsToInclude, ...tileConfig]
@@ -80,30 +76,32 @@ export class LevelBuilder {
 
         this._pathFinder = new PathFinder(matrixToNodes(this._walkableMatrix));
 
+        document.addEventListener('sysStep', () => {
+            let amount = 0;
+
+            this._positionsMatrix.forEach((item) => item.forEach((tile) => {
+                if(tile) {
+                    amount++;
+                }
+            }));
+
+            console.info(amount);
+        });
+
         // test path folowing
         // const path = this._pathFinder.getPath({x: 9, y: 8}, {x: 25, y: 60});
         // this.EXP_moveCreatureByPath(testCreature, path);
     }
 
-    private EXP_moveCreatureByPath = (obj: Creature, path: PathNode[]) => {
-        if(path.length === 1) {
-            return;
-        }
+    public lockPosition = (x: number, y: number) => {
+        setInMatrix(x, y, true, this._positionsMatrix);
+    }
 
-        obj.setPosition(path[0].position);
+    public unlockPosition = (x: number, y: number) => {
+        setInMatrix(x, y, false, this._positionsMatrix);
+    }
 
-        setTimeout(() => this.EXP_moveCreatureByPath(obj, [...path].splice(1, path.length)), 10);
-    } 
-
-    public isTileWalkable(x: number, y: number, log = false) {
-        const positionFallback = getInMatrix(x, y, this._positionsMatrix);
-
-        if(log) {
-            console.log(positionFallback, getInMatrix(x, y, this._walkableMatrix));
-        }
-
-        return positionFallback === undefined 
-            ? getInMatrix(x, y, this._walkableMatrix)
-            : !(!getInMatrix(x, y, this._walkableMatrix) || !positionFallback);
+    public isTileWalkable(x: number, y: number) {
+        return getInMatrix(x, y, this._walkableMatrix) && !getInMatrix(x, y, this._positionsMatrix);
     }
 }

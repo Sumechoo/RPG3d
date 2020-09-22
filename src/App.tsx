@@ -1,6 +1,9 @@
 import React, { useRef, useEffect } from "react";
 import "./styles.css";
 import { MainRenderer } from "./classes/MainRenderer";
+import { Stepper } from "./classes/Stepper";
+
+new Stepper();
 
 const renderer = new MainRenderer();
 

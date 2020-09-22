@@ -4,7 +4,7 @@ import { DEMO_LEVEL } from "../levels/DEMO";
 import { CatBarn } from "../levels/CatBarn";
 import { IAnimated } from "../types";
 
-const level = DEMO_LEVEL;
+const level = CatBarn;
 
 export class MainRenderer extends WebGL1Renderer {
   private _scene: Scene;
