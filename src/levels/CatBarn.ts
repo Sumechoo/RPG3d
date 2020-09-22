@@ -6,14 +6,14 @@ export const CatBarn: Level = {
      t t tt
      
      wwwwwwwww
- t   wcccccc@w  t
-     wcccccc w
- t   wcccccccw  t
-     wcccccccw
-     wcccccccw   t
- t   w ccccccw
-     wwwwwwwww
-     
+ t   w       w
+ t   w       wwwwwwwwwww
+ t   w       w         wwww
+ t   w   @   w            w
+ t   w       wwwwwwwwwww  w
+ t   w c       w       w  w
+     wwwwwwww     w       w
+             wwwwwwwwwwwwww
      t   t
     `,
     configs: {
@@ -25,7 +25,7 @@ export const CatBarn: Level = {
         },
         ' ': {
             tileConfig: [
-                {texture: 'floor_stone', isWalkable: true},
+                {texture: 'window_old', isWalkable: true},
             ],
         },
         t: {

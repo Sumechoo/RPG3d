@@ -4,6 +4,7 @@ import { approxVector3, setInMatrix } from "./utils";
 import { LevelBuilder } from "./LevelBuilder";
 import { Sprite } from "./Sprite";
 import { IMAGE_ASSETS } from "../assets/images";
+import { PathNode } from "./PathFinder";
 
 export interface CreatureParams {
     body?: Object3D;
@@ -25,7 +26,7 @@ export class Creature extends Object3D implements IAnimated {
     protected _supportRotation: boolean;
     protected _stepCandidate?: Candidate;
 
-    private _positionMatrixRef: boolean[][] = [];
+    private _pathToFollow: Array<PathNode> = [];
 
     constructor(params: CreatureParams) {
         super();
@@ -50,7 +51,7 @@ export class Creature extends Object3D implements IAnimated {
         const oldY = this.position.z;
 
         if(x === oldX && y === oldY) {
-            return;
+            return false;
         }
 
         this._stepCandidate = {
@@ -58,7 +59,26 @@ export class Creature extends Object3D implements IAnimated {
             old: {x: oldX, y: oldY},
         };
 
-        console.info(this._stepCandidate);
+        return true;
+    }
+
+    protected getPathNextNode = () => {
+        const nextNode = this._pathToFollow[0];
+
+        if(!nextNode) {
+            return;
+        }
+
+        this._pathToFollow = this._pathToFollow.splice(1, this._pathToFollow.length);
+
+        return nextNode;
+    }
+
+    protected findWayTo = (position: Vec2) => {
+        this._pathToFollow = this._currentLevel.getPath({
+            x: this.position.x,
+            y: this.position.z,
+        }, position);
     }
 
     protected prepareStepCandidate = () => {};

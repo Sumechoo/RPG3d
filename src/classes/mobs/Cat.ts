@@ -12,19 +12,10 @@ export class Cat extends Creature {
     }
 
     protected prepareStepCandidate = () => {
-        const vertical = Math.random() > 0.5;
-        const negate = Math.random() > 0.5;
+        const nextNode = this.getPathNextNode();
 
-        let shift = Math.ceil(Math.random() - 0.5);
-
-        if(negate) {
-            shift = shift * -1;
-        }
-
-        if(vertical) {
-            this.setStepCandidate({x: this.position.x, y: this.position.z + shift});
-        } else {
-            this.setStepCandidate({x: this.position.x + shift, y: this.position.z});
+        if(!(nextNode && this.setStepCandidate(nextNode.position))) {
+            // this.findWayTo({x: 7, y: 16});
         }
     }
 }

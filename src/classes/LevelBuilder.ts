@@ -2,7 +2,7 @@ import { Level, TileConfig, TileFormat } from "../types";
 import { MainRenderer } from "./MainRenderer";
 import { PlayerController } from "./PlayerController";
 import { Block } from "./Block";
-import { Vector3, SpriteMaterial } from "three";
+import { Vector3, SpriteMaterial, Vec2 } from "three";
 import { IMAGE_ASSETS } from "../assets/images";
 import { getInMatrix, setInMatrix, matrixToNodes } from "./utils";
 import { Sprite } from "./Sprite";
@@ -75,23 +75,9 @@ export class LevelBuilder {
         });
 
         this._pathFinder = new PathFinder(matrixToNodes(this._walkableMatrix));
-
-        document.addEventListener('sysStep', () => {
-            let amount = 0;
-
-            this._positionsMatrix.forEach((item) => item.forEach((tile) => {
-                if(tile) {
-                    amount++;
-                }
-            }));
-
-            console.info(amount);
-        });
-
-        // test path folowing
-        // const path = this._pathFinder.getPath({x: 9, y: 8}, {x: 25, y: 60});
-        // this.EXP_moveCreatureByPath(testCreature, path);
     }
+
+    public getPath = (start: Vec2, end: Vec2) => this._pathFinder.getPath(start, end);
 
     public lockPosition = (x: number, y: number) => {
         setInMatrix(x, y, true, this._positionsMatrix);

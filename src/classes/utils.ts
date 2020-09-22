@@ -11,6 +11,9 @@ export const getInMatrix = <T>(x: number, y: number, matrix: T[][]): T | undefin
 }
 
 export const setInMatrix = <T>(x: number, y: number, value: T, matrix: T[][]) => {
+    x = Math.round(x);
+    y = Math.round(y);
+    
     if (matrix[x]) {
         matrix[x][y] = value;
     } else {

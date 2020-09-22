@@ -56,11 +56,16 @@ export class PathFinder {
                 } else {
                     pathFound = true;
 
-                    path = this.collectPath(node, [node]);
+                    try {
+                        path = this.collectPath(node, [node]);
+                    } catch {
+                        console.error('Looped path');
+                    }
                 }
             });
         }
 
+        console.info('Composed path:', path);
         return path;
     }
 

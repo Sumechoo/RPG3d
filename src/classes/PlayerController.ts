@@ -38,6 +38,8 @@ export class PlayerController extends Creature {
             return;
         }
 
+        console.warn('Player position is', this._newPositionCandidate);
+
         this.setStepCandidate({x: this._newPositionCandidate.x, y: this._newPositionCandidate.z});
     }
 
