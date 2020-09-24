@@ -118,7 +118,7 @@ export class Creature extends Object3D implements IAnimated {
             this.matrixWorld.decompose(dummy, q, dummy);
             this._body.matrixWorld.decompose(dummy, oldQ, dummy);
 
-            this._body.rotation.setFromQuaternion(q.slerp(oldQ, Math.random()));
+            this._body.rotation.setFromQuaternion(q.slerp(oldQ, 0));
         }
 
         approxVector3(this._body.position, this.position, 4);

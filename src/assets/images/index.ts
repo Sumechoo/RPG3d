@@ -3,7 +3,7 @@ import floor_stone from './floor_stone.png';
 import floor_wood from './floor_wood.jpg';
 import brick_wall from './brick_wall.jpg';
 import window_old from './window_old.jpg';
-import grass from './grass.jpeg';
+import grass from './grass.png';
 import tall_grass from './tall_grass.png';
 import tree from './tree.png';
 import fence from './fence.png';

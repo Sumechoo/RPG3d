@@ -1,9 +1,12 @@
 import { Vector3 } from "three";
 import { IMAGE_ASSETS } from "../../assets/images";
 import { Creature, CreatureParams } from "../Creature";
+import { PathNode } from "../PathFinder";
 import { Sprite } from "../Sprite";
 
 export class Cat extends Creature {
+    private _nextPathNode?: PathNode;
+
     constructor(params: CreatureParams) {
         super({
             ...params,
@@ -12,10 +15,14 @@ export class Cat extends Creature {
     }
 
     protected prepareStepCandidate = () => {
-        const nextNode = this.getPathNextNode();
+        this._nextPathNode = this.getPathNextNode();
 
-        if(!(nextNode && this.setStepCandidate(nextNode.position))) {
-            // this.findWayTo({x: 7, y: 16});
+        if(this._nextPathNode) {
+            if(!this.setStepCandidate(this._nextPathNode.position)) {
+                this._nextPathNode = undefined;
+            }
+        } else {
+            this.findWayTo({x: 7, y: 16});
         }
     }
 }

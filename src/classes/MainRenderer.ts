@@ -3,8 +3,9 @@ import { LevelBuilder } from "./LevelBuilder";
 import { DEMO_LEVEL } from "../levels/DEMO";
 import { CatBarn } from "../levels/CatBarn";
 import { IAnimated } from "../types";
+import { MAP_01 } from "../levels/MAP_01";
 
-const level = CatBarn;
+const level = MAP_01;
 
 export class MainRenderer extends WebGL1Renderer {
   private _scene: Scene;
@@ -16,7 +17,7 @@ export class MainRenderer extends WebGL1Renderer {
     super();
 
     this._scene = new Scene();
-    this._scene.fog = new FogExp2(0xaaaaaa, 0.20);
+    this._scene.fog = new FogExp2(0xb55f35, 0.20);
 
     this._camera.position.z = 5;
     this._camera.position.x = 2;

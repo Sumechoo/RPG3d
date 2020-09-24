@@ -66,7 +66,7 @@ export class PathFinder {
         }
 
         console.info('Composed path:', path);
-        return path;
+        return path.reverse();
     }
 
     private collectPath = (node: PathNode, collection: PathNode[]) => {

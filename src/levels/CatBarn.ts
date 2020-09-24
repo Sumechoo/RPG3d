@@ -4,12 +4,13 @@ import { Level, TileFormat } from "../types";
 export const CatBarn: Level = {
     map: `
      t t tt
-     
-     wwwwwwwww
- t   w       w
- t   w       wwwwwwwwwww
+     wwwwwwwwwww
+     w         w
+     w@wwwwwww wwwwwww
+ t   w       w       w
+ t   w       wwwwwww www
  t   w       w         wwww
- t   w   @   w            w
+ t   w       w            w
  t   w       wwwwwwwwwww  w
  t   w c       w       w  w
      wwwwwwww     w       w
