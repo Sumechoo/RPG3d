@@ -9,6 +9,5 @@ const manifest = {
 export class Stepper {
     constructor() {
         document.title = `${manifest.appName} (${manifest.version}) Runtime`;
-        document.addEventListener('sysStep', () => console.info('Step done'));
     }
 }

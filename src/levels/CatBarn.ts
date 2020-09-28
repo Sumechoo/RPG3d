@@ -20,8 +20,8 @@ export const CatBarn: Level = {
     configs: {
         w: {
             tileConfig: [
-                {texture: 'floor_stone', yShift: 1},
-                {texture: 'floor_wood', yShift: 1},
+                {texture: 'floor_stone', yShift: () => 1},
+                {texture: 'floor_wood', yShift: () => 1},
             ]
         },
         ' ': {
@@ -31,7 +31,7 @@ export const CatBarn: Level = {
         },
         t: {
             tileConfig: [
-                {format: TileFormat.SPRITE, texture: 'tree', size: 10, yShift: 5},
+                {format: TileFormat.SPRITE, texture: 'tree', size: 10, yShift: () => 5},
             ],
         },
         c: {

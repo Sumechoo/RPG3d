@@ -10,6 +10,9 @@ export class Block extends Object3D {
         this._geometry = new BoxGeometry(1,1,1);
         this._mesh = new Mesh(this._geometry, texture);
 
+        this._mesh.castShadow = true;
+        this._mesh.receiveShadow = true;
+
         this.position.copy(position);
 
         this.add(this._mesh);

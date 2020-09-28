@@ -1,6 +1,6 @@
 import { Object3D, Vec2, Vector3, Quaternion } from "three";
 import { IAnimated } from "../types";
-import { approxVector3, setInMatrix } from "./utils";
+import { approxVector3 } from "./utils";
 import { LevelBuilder } from "./LevelBuilder";
 import { Sprite } from "./Sprite";
 import { IMAGE_ASSETS } from "../assets/images";
@@ -11,6 +11,10 @@ export interface CreatureParams {
     supportRotation?: boolean;
     position: Vec2;
     level: LevelBuilder;
+}
+
+export interface CreatureProperties {
+    health: number;
 }
 
 const dummy = new Vector3();
@@ -27,13 +31,17 @@ export class Creature extends Object3D implements IAnimated {
     protected _stepCandidate?: Candidate;
 
     private _pathToFollow: Array<PathNode> = [];
+    private _properties: CreatureProperties;
 
     constructor(params: CreatureParams) {
         super();
 
         this._currentLevel = params.level;
-        this._body = params.body ?? new Sprite(new Vector3(), IMAGE_ASSETS.cat, 1);
+        this._body = params.body ?? new Sprite(new Vector3(), IMAGE_ASSETS.arrow, 1);
         this._supportRotation = !!params.supportRotation;
+        this._properties = {
+            health: 100,
+        };
 
         this.setPosition(params.position);
 
@@ -42,10 +50,11 @@ export class Creature extends Object3D implements IAnimated {
 
     public setStepCandidate({x, y}: Vec2) {
         if(!this._currentLevel.isTileWalkable(x,y)) {
+            this.doAction({x, y});
             return false;
         }
 
-        this._currentLevel.lockPosition(x, y);
+        this._currentLevel.lockPosition(x, y, this);
 
         const oldX = this.position.x;
         const oldY = this.position.z;
@@ -61,6 +70,23 @@ export class Creature extends Object3D implements IAnimated {
 
         return true;
     }
+
+    public applyDamage = (amount: number) => {
+        this._properties.health -= amount;
+    }
+
+    private doAction = ({x, y}: Vec2) => {
+        const targetCreature = this._currentLevel.getCreatureAt(x,y);
+
+        if (!targetCreature) {
+            return;
+        }
+
+        this.interact(targetCreature);
+        this._body.position.set(x, this.position.y, y);
+    }
+
+    protected interact = (target: Creature) => {}
 
     protected getPathNextNode = () => {
         const nextNode = this._pathToFollow[0];
@@ -84,7 +110,14 @@ export class Creature extends Object3D implements IAnimated {
     protected prepareStepCandidate = () => {};
 
     protected doStep = () => {
-        this._currentLevel.lockPosition(this.position.x, this.position.z);
+        console.info(this.name, 'doin step with', this._properties.health);
+        if(this._properties.health <= 0) {
+            this._currentLevel.removeCreature(this);
+            document.removeEventListener('sysStep', this.doStep);
+            return;
+        }
+
+        this._currentLevel.lockPosition(this.position.x, this.position.z, this);
         this.prepareStepCandidate();
 
         if (!this._stepCandidate) {
@@ -99,7 +132,7 @@ export class Creature extends Object3D implements IAnimated {
 
         this.position.set(x, this.position.y, y);
         this._currentLevel.unlockPosition(old.x, old.y);
-        this._currentLevel.lockPosition(x, y);
+        this._currentLevel.lockPosition(x, y, this);
 
         this._stepCandidate = undefined;
 

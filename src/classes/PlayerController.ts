@@ -6,7 +6,7 @@ import { StepEvent } from "./Stepper";
 const forward = new Vector3();
 
 export class PlayerController extends Creature {
-    private _camera: PerspectiveCamera = new PerspectiveCamera(75, 2/1, 0.1, 1000);
+    private _camera: PerspectiveCamera = new PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
     private _newPositionCandidate?: Vector3;
     
     constructor(params: CreatureParams) {
@@ -16,6 +16,9 @@ export class PlayerController extends Creature {
 
         document.addEventListener('keydown', (event) => {
             this._camera.getWorldDirection(forward);
+            this._camera.far = 10;
+            this._camera.near = 0.01;
+            this._camera.updateProjectionMatrix();
 
             const newPositionCandidate = new Vector3(); 
             newPositionCandidate.copy(this.position);
@@ -38,12 +41,18 @@ export class PlayerController extends Creature {
             return;
         }
 
-        console.warn('Player position is', this._newPositionCandidate);
-
         this.setStepCandidate({x: this._newPositionCandidate.x, y: this._newPositionCandidate.z});
     }
 
     public getCamera() {
         return this._camera;
+    }
+
+    protected interact = (target: Creature) => {
+        if(target === this) {
+            return;
+        }
+
+        target.applyDamage(1000);
     }
 }

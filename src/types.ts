@@ -19,10 +19,12 @@ export enum TileFormat {
 
 export interface TileConfig {
     isWalkable?: boolean;
-    yShift?: number;
+    isHairy?: boolean;
+    yShift?: () => number;
     texture?: keyof typeof IMAGE_ASSETS;
     format?: TileFormat;
     size?: number;
+    facing?: () => number;
 }
 
 export interface IAnimated {

@@ -1,14 +1,20 @@
-import {Sprite as SpriteParent, Object3D, Vector3, SpriteMaterial} from 'three';
+import {Sprite as SpriteParent, Object3D, Vector3, SpriteMaterial, PlaneGeometry, Mesh, Material, MeshStandardMaterial, BufferGeometry} from 'three';
+import { degToRad } from './utils';
 
 export class Sprite extends Object3D {    
-    constructor(position: Vector3, texture: SpriteMaterial, size = 1) {
+    constructor(position: Vector3, texture: MeshStandardMaterial, size = 1, facing = 0) {
         super();
 
-        const sprite = new SpriteParent(texture);
+        const geometry = new PlaneGeometry(size, size, 1, 1);
+        const sprite = new Mesh(geometry, texture);
+        const buffer = new BufferGeometry();
 
-        sprite.scale.set(size, size, size);
+        buffer.setFromObject(sprite);
+
+        // buffer.
 
         this.position.copy(position);
+        this.rotateY(degToRad(facing));
 
         this.add(sprite);
     }

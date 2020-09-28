@@ -14,7 +14,7 @@ export class Cat extends Creature {
         });
     }
 
-    protected prepareStepCandidate = () => {
+    protected prepareStepCandidate2 = () => {
         this._nextPathNode = this.getPathNextNode();
 
         if(this._nextPathNode) {

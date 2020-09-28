@@ -4,6 +4,7 @@ import floor_wood from './floor_wood.jpg';
 import brick_wall from './brick_wall.jpg';
 import window_old from './window_old.jpg';
 import grass from './grass.png';
+import actual_grass from './grass.jpeg';
 import tall_grass from './tall_grass.png';
 import tree from './tree.png';
 import fence from './fence.png';
@@ -13,7 +14,7 @@ import asphalt from './asphalt.jpg';
 import lep from './lep.png';
 import arrow from './arrow.png';
 import cat from './cat.png';
-import { TextureLoader, MeshStandardMaterial, NearestFilter, SpriteMaterial } from 'three';
+import { TextureLoader, MeshStandardMaterial, NearestFilter, SpriteMaterial, Side, DoubleSide } from 'three';
 
 const loader = new TextureLoader();
 
@@ -27,7 +28,19 @@ const createTexture = (t: string, transparent = false) => {
     });
 }
 
-const createSprite = (t: string, attenuate = true) => {
+const createSprite = (t: string, transparent = false) => {
+    const texture = loader.load(t);
+    texture.magFilter = NearestFilter;
+
+    return new MeshStandardMaterial({
+        map: texture,
+        alphaMap: texture,
+        alphaTest: 0.08,
+        side: DoubleSide,
+    });
+}
+
+const createSprite2 = (t: string, attenuate = true) => {
     const texture = loader.load(t);
     texture.magFilter = NearestFilter;
 
@@ -43,6 +56,7 @@ export const IMAGE_ASSETS = {
     'grass': createTexture(grass),
     'asphalt': createTexture(asphalt),
     'beton_wall': createTexture(beton_wall),
+    actual_grass: createTexture(actual_grass),
 
     'tree': createSprite(tree),
     'angel': createSprite(angel),
