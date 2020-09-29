@@ -8,6 +8,17 @@ import { getInMatrix, setInMatrix, matrixToNodes } from "./utils";
 import { Sprite } from "./Sprite";
 import { PathFinder } from "./PathFinder";
 import { Creature } from "./Creature";
+import { InstancedGeometry } from "./IstancedGeometry";
+
+export const GEOMETRY_RESOURCES = {
+    grass_01: new InstancedGeometry(IMAGE_ASSETS.tall_grass, 1),
+    grass_02: new InstancedGeometry(IMAGE_ASSETS.tall_grass_02, 1),
+    stone: new InstancedGeometry(IMAGE_ASSETS.stone, 1),
+
+    fence: new InstancedGeometry(IMAGE_ASSETS.fence, 1),
+    
+    tree_01: new InstancedGeometry(IMAGE_ASSETS.tree, 4),
+}
 
 export class LevelBuilder {
     private _walkableMatrix: boolean[][] = [];
@@ -65,16 +76,42 @@ export class LevelBuilder {
                         let magnitude = -1;
 
                         [...configsToInclude, ...tileConfig]
-                            .forEach(({yShift, texture, isWalkable, format, size, isHairy, facing}, index) => {
+                            .forEach(({yShift, texture, isWalkable, format, size, isHairy, facing, geometry}, index) => {
                                 magnitude = yShift ? magnitude + yShift() : magnitude;
                                 const position = new Vector3(x, magnitude + index, y);
                                 const facingValue = facing && facing();
 
-                                size = isHairy && size ? size * Math.random() + 0.5 : size;
+                                setInMatrix(x, y, isWalkable || false, this._walkableMatrix);
+
+                                size = isHairy && size ? size / 2 + Math.random() * 2 : size;
+
+                                if (geometry) {
+                                    const targetName = geometry[Math.floor(Math.random() * geometry.length)];
+                                    const targetResource = GEOMETRY_RESOURCES[targetName];
+
+                                    if (isHairy) {
+                                        for(let i = 0; i < 100; i++) {
+                                            const targetName = geometry[Math.floor(Math.random() * geometry.length)];
+                                            const targetResource = GEOMETRY_RESOURCES[targetName];
+
+                                            const shiftedPosition = new Vector3(
+                                                position.x + Math.random() * 1 - 0.5,
+                                                position.y,
+                                                position.z + Math.random() * 1 - 0.5,
+                                            );
+
+                                            targetResource.addInstance(shiftedPosition, size, Math.random() * 360);
+                                        }
+                                    }
+
+                                    targetResource.addInstance(position, size, facingValue);
+
+                                    return;
+                                }
 
                                 if (format === TileFormat.SPRITE) {
                                     if (isHairy) {
-                                        for(let i = 0; i < Math.round(Math.random() * 10) + 3; i++) {
+                                        for(let i = 0; i < 1; i++) {
                                             const shiftedPosition = new Vector3(
                                                 position.x + Math.random() / 1.5,
                                                 position.y,
@@ -88,12 +125,15 @@ export class LevelBuilder {
                                 } else {
                                     renderer.add(new Block(position, IMAGE_ASSETS[texture ?? 'floor_stone']));
                                 }
-                                setInMatrix(x, y, isWalkable || false, this._walkableMatrix);
                             });
                     }
                     break;
             }
         });
+
+        const resourcesArray = Object.values(GEOMETRY_RESOURCES);
+        this._renderer.add(...resourcesArray);
+        resourcesArray.forEach((resource) => resource.finalize());
 
         this._pathFinder = new PathFinder(matrixToNodes(this._walkableMatrix));
     }

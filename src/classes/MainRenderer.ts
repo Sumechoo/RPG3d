@@ -1,4 +1,4 @@
-import { WebGL1Renderer, Scene, FogExp2, Object3D, PerspectiveCamera, Vector3, DirectionalLight, AmbientLight, Camera, Color } from "three";
+import { WebGL1Renderer, Scene, FogExp2, Object3D, PerspectiveCamera, Vector3, DirectionalLight, AmbientLight, Camera, Color, WebGLRenderer } from "three";
 import { LevelBuilder } from "./LevelBuilder";
 import { DEMO_LEVEL } from "../levels/DEMO";
 import { CatBarn } from "../levels/CatBarn";
@@ -17,21 +17,21 @@ export class MainRenderer extends WebGL1Renderer {
     super();
 
     this._scene = new Scene();
-    this._scene.fog = new FogExp2(0x334488, 0.25);
+    this._scene.fog = new FogExp2(0xaaaaaa, 0.3);
 
     this._camera.position.z = 5;
     this._camera.position.x = 2;
 
-    this.setClearColor(0x334488);
+    this.setClearColor(0xaaaaaa);
 
     this.add(this._camera);
 
-    const sun = new DirectionalLight(0xaaaaaa, 0.02);
+    const sun = new DirectionalLight(0xbbbaaa, 2.02);
 
     sun.position.add(new Vector3(1,0,0));
     sun.castShadow = true;
 
-    this.add(sun, new AmbientLight(0x8888ff, 0.3));
+    this.add(sun, new AmbientLight(0xaaaadd, 0.9));
 
     new LevelBuilder(level, this);
   }

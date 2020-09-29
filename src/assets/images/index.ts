@@ -6,6 +6,7 @@ import window_old from './window_old.jpg';
 import grass from './grass.png';
 import actual_grass from './grass.jpeg';
 import tall_grass from './tall_grass.png';
+import tall_grass_02 from './tall_grass2.png';
 import tree from './tree.png';
 import fence from './fence.png';
 import angel from './angel.png';
@@ -14,37 +15,31 @@ import asphalt from './asphalt.jpg';
 import lep from './lep.png';
 import arrow from './arrow.png';
 import cat from './cat.png';
-import { TextureLoader, MeshStandardMaterial, NearestFilter, SpriteMaterial, Side, DoubleSide } from 'three';
+import stone from './stone.png';
+import { TextureLoader, MeshStandardMaterial, NearestFilter, DoubleSide, MeshBasicMaterial } from 'three';
 
 const loader = new TextureLoader();
 
-const createTexture = (t: string, transparent = false) => {
+const createTexture = (t: string) => {
     const texture = loader.load(t);
     texture.magFilter = NearestFilter;
 
     return new MeshStandardMaterial({
         map: texture,
-        transparent,
     });
 }
 
-const createSprite = (t: string, transparent = false) => {
+const createSprite = (t: string) => {
     const texture = loader.load(t);
-    texture.magFilter = NearestFilter;
+    // texture.magFilter = NearestFilter;
+    texture.flipY = true;
 
     return new MeshStandardMaterial({
         map: texture,
         alphaMap: texture,
-        alphaTest: 0.08,
+        alphaTest: 0.09,
         side: DoubleSide,
     });
-}
-
-const createSprite2 = (t: string, attenuate = true) => {
-    const texture = loader.load(t);
-    texture.magFilter = NearestFilter;
-
-    return new SpriteMaterial({map: texture, transparent: true, sizeAttenuation: attenuate});
 }
 
 export const IMAGE_ASSETS = {
@@ -63,6 +58,8 @@ export const IMAGE_ASSETS = {
     'lep': createSprite(lep),
     'fence': createSprite(fence),
     'tall_grass': createSprite(tall_grass),
+    'tall_grass_02': createSprite(tall_grass_02),
     'arrow': createSprite(arrow),
     'cat': createSprite(cat),
+    'stone': createSprite(stone),
 }

@@ -1,4 +1,5 @@
 import { IMAGE_ASSETS } from "./assets/images";
+import {GEOMETRY_RESOURCES} from './classes/LevelBuilder';
 import { Creature } from "./classes/Creature";
 
 export interface PartConfig {
@@ -22,6 +23,7 @@ export interface TileConfig {
     isHairy?: boolean;
     yShift?: () => number;
     texture?: keyof typeof IMAGE_ASSETS;
+    geometry?: Array<keyof typeof GEOMETRY_RESOURCES>;
     format?: TileFormat;
     size?: number;
     facing?: () => number;

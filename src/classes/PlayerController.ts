@@ -16,7 +16,7 @@ export class PlayerController extends Creature {
 
         document.addEventListener('keydown', (event) => {
             this._camera.getWorldDirection(forward);
-            this._camera.far = 10;
+            this._camera.far = 50;
             this._camera.near = 0.01;
             this._camera.updateProjectionMatrix();
 

@@ -22,8 +22,8 @@ export const DEMO_LEVEL: Level = {
     TT  w____________Af____________T_TT_T_WFFFF_FFFFW_T________BBBBB
     T   w_______T_T__Af____T______________fAAAAAABBBf____________w  T
      T  w___T__T___T_Af____________T____T_fAAAAAB  Bf____________w   T
-     wwww____________Af______________T__T_fA@AAAB  BfT___________w    T
-     wAAAAAAAAAAAAAAAAf_____________T___T_fAAAAAB  Bf____________w
+     wwww____________Af______________T__T_fAAAAAB  BfT___________w    T
+     wAAAAAAAAAAAAAAAAf_____________T___T_fA@AAAB  Bf____________w
      wwww__________wwwwww_________T_____T_fAAAAAB  Bf____________w 
      T  w___T______f________________T_T_T_fAAAAAABBBf____________w
     T   w_____T____f____f_______________T_WFF_FFFFFFW___________w
@@ -59,13 +59,13 @@ export const DEMO_LEVEL: Level = {
         'f': {
             includes: ['_'],
             tileConfig: [
-                {yShift: () => -0.62, texture: 'fence', format: TileFormat.SPRITE, size: 1},
+                {yShift: () => -0.62, geometry: ['fence'], size: 1},
             ]
         },
         F: {
             includes: ['_'],
             tileConfig: [
-                {yShift: () => -0.62, texture: 'fence', format: TileFormat.SPRITE, size: 1, facing: () => 90},
+                {yShift: () => -0.62, geometry: ['fence'], size: 1, facing: () => 90},
             ]
         },
         '_': {
@@ -74,9 +74,8 @@ export const DEMO_LEVEL: Level = {
                 {
                     yShift: () => -0.4,
                     isWalkable: true,
-                    texture: 'tall_grass',  
-                    format: TileFormat.SPRITE,
-                    size: 1,
+                    geometry: ['grass_01', 'grass_02'],
+                    size: 0.6,
                     isHairy: true,
                     facing: () => Math.random() * 360,
                 },
@@ -86,9 +85,8 @@ export const DEMO_LEVEL: Level = {
             includes: ['_'],
             tileConfig: [
                 {
-                    texture: 'tree', 
+                    geometry: ['tree_01'],
                     yShift: () => 2.8,
-                    format: TileFormat.SPRITE,
                     size: 10,
                     isWalkable: true,
                     facing: () => Math.random() * 360,
