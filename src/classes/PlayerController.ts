@@ -6,7 +6,7 @@ import { StepEvent } from "./Stepper";
 const forward = new Vector3();
 
 export class PlayerController extends Creature {
-    private _camera: PerspectiveCamera = new PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    private _camera: PerspectiveCamera = new PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 60);
     private _newPositionCandidate?: Vector3;
     
     constructor(params: CreatureParams) {
@@ -16,8 +16,6 @@ export class PlayerController extends Creature {
 
         document.addEventListener('keydown', (event) => {
             this._camera.getWorldDirection(forward);
-            this._camera.far = 50;
-            this._camera.near = 0.01;
             this._camera.updateProjectionMatrix();
 
             const newPositionCandidate = new Vector3(); 

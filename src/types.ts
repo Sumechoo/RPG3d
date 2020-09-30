@@ -32,3 +32,12 @@ export interface TileConfig {
 export interface IAnimated {
     animate: VoidFunction;
 }
+
+export interface GeometryParams {
+    indices: number[];
+    normals: number[];
+    vertices: number[];
+    uvs: number[];
+}
+
+export type Preparator = () => GeometryParams;

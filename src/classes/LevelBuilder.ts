@@ -9,15 +9,22 @@ import { Sprite } from "./Sprite";
 import { PathFinder } from "./PathFinder";
 import { Creature } from "./Creature";
 import { InstancedGeometry } from "./IstancedGeometry";
+import { PrepareBoxGeometry } from "./GeometryPreparators";
 
 export const GEOMETRY_RESOURCES = {
-    grass_01: new InstancedGeometry(IMAGE_ASSETS.tall_grass, 1),
-    grass_02: new InstancedGeometry(IMAGE_ASSETS.tall_grass_02, 1),
-    stone: new InstancedGeometry(IMAGE_ASSETS.stone, 1),
+    // TODO: Collect info about static sprites amount to proper init of resources
+    grass_01: new InstancedGeometry(IMAGE_ASSETS.tall_grass, 1, 60000, true),
+    grass_02: new InstancedGeometry(IMAGE_ASSETS.tall_grass_02, 2, 60000, true),
+    grass_03: new InstancedGeometry(IMAGE_ASSETS.tall_grass_03, 1, 22000, true),
+    bush: new InstancedGeometry(IMAGE_ASSETS.bush, 1, 2500, true),
 
-    fence: new InstancedGeometry(IMAGE_ASSETS.fence, 1),
+    wall: new InstancedGeometry(IMAGE_ASSETS.window_old, 1, 500, false, true, PrepareBoxGeometry),
+    asphalt: new InstancedGeometry(IMAGE_ASSETS.actual_grass, 1, 4000, false, true, PrepareBoxGeometry),
+    fence: new InstancedGeometry(IMAGE_ASSETS.fence, 1, 500),
     
-    tree_01: new InstancedGeometry(IMAGE_ASSETS.tree, 4),
+    tree_01: new InstancedGeometry(IMAGE_ASSETS.tree, 4, 200, true),
+    tree_02: new InstancedGeometry(IMAGE_ASSETS.tree2, 5, 200, true),
+    tree_03: new InstancedGeometry(IMAGE_ASSETS.tree3, 4, 200,true),
 }
 
 export class LevelBuilder {
@@ -83,24 +90,23 @@ export class LevelBuilder {
 
                                 setInMatrix(x, y, isWalkable || false, this._walkableMatrix);
 
-                                size = isHairy && size ? size / 2 + Math.random() * 2 : size;
-
                                 if (geometry) {
                                     const targetName = geometry[Math.floor(Math.random() * geometry.length)];
                                     const targetResource = GEOMETRY_RESOURCES[targetName];
 
                                     if (isHairy) {
-                                        for(let i = 0; i < 100; i++) {
+                                        for(let i = 0; i < 60; i++) {
+                                            const sizeMod = (size ?? 1) * (Math.random() + 3.4);
                                             const targetName = geometry[Math.floor(Math.random() * geometry.length)];
                                             const targetResource = GEOMETRY_RESOURCES[targetName];
 
                                             const shiftedPosition = new Vector3(
-                                                position.x + Math.random() * 1 - 0.5,
+                                                position.x + Math.random() * 0.8 - 0.4,
                                                 position.y,
-                                                position.z + Math.random() * 1 - 0.5,
+                                                position.z + Math.random() * 0.8 - 0.4,
                                             );
 
-                                            targetResource.addInstance(shiftedPosition, size, Math.random() * 360);
+                                            targetResource.addInstance(shiftedPosition, sizeMod, Math.random() * 360);
                                         }
                                     }
 
@@ -110,18 +116,7 @@ export class LevelBuilder {
                                 }
 
                                 if (format === TileFormat.SPRITE) {
-                                    if (isHairy) {
-                                        for(let i = 0; i < 1; i++) {
-                                            const shiftedPosition = new Vector3(
-                                                position.x + Math.random() / 1.5,
-                                                position.y,
-                                                position.z + Math.random() / 1.5,
-                                            );
-                                            renderer.add(new Sprite(shiftedPosition, IMAGE_ASSETS[texture ?? 'tree'], size, facingValue));
-                                        }
-                                    } else {
-                                        renderer.add(new Sprite(position, IMAGE_ASSETS[texture ?? 'tree'], size, facingValue));                                        
-                                    }
+                                    renderer.add(new Sprite(position, IMAGE_ASSETS[texture ?? 'tree'], size, facingValue));                                        
                                 } else {
                                     renderer.add(new Block(position, IMAGE_ASSETS[texture ?? 'floor_stone']));
                                 }
@@ -132,8 +127,9 @@ export class LevelBuilder {
         });
 
         const resourcesArray = Object.values(GEOMETRY_RESOURCES);
-        this._renderer.add(...resourcesArray);
         resourcesArray.forEach((resource) => resource.finalize());
+
+        this._renderer.add(...resourcesArray);
 
         this._pathFinder = new PathFinder(matrixToNodes(this._walkableMatrix));
     }

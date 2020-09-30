@@ -4,10 +4,13 @@ import floor_wood from './floor_wood.jpg';
 import brick_wall from './brick_wall.jpg';
 import window_old from './window_old.jpg';
 import grass from './grass.png';
-import actual_grass from './grass.jpeg';
+import actual_grass from './forest_floor.png';
 import tall_grass from './tall_grass.png';
 import tall_grass_02 from './tall_grass2.png';
+import tall_grass_03 from './tall_grass3.png';
 import tree from './tree.png';
+import tree2 from './tree2.png';
+import tree3 from './tree3.png';
 import fence from './fence.png';
 import angel from './angel.png';
 import beton_wall from './beton_wall.png';
@@ -15,30 +18,33 @@ import asphalt from './asphalt.jpg';
 import lep from './lep.png';
 import arrow from './arrow.png';
 import cat from './cat.png';
+import bush from './bush.png';
 import stone from './stone.png';
-import { TextureLoader, MeshStandardMaterial, NearestFilter, DoubleSide, MeshBasicMaterial } from 'three';
+import { TextureLoader, MeshStandardMaterial, NearestFilter, DoubleSide, MeshBasicMaterial, MeshPhysicalMaterial } from 'three';
 
 const loader = new TextureLoader();
 
 const createTexture = (t: string) => {
     const texture = loader.load(t);
-    texture.magFilter = NearestFilter;
 
-    return new MeshStandardMaterial({
+    return new MeshPhysicalMaterial({
         map: texture,
+        bumpMap: texture,
+        bumpScale: 0.1,
     });
 }
 
 const createSprite = (t: string) => {
     const texture = loader.load(t);
-    // texture.magFilter = NearestFilter;
     texture.flipY = true;
 
-    return new MeshStandardMaterial({
+    return new MeshPhysicalMaterial({
         map: texture,
         alphaMap: texture,
         alphaTest: 0.09,
         side: DoubleSide,
+        dithering: true,
+        
     });
 }
 
@@ -54,11 +60,15 @@ export const IMAGE_ASSETS = {
     actual_grass: createTexture(actual_grass),
 
     'tree': createSprite(tree),
+    'tree2': createSprite(tree2),
+    'tree3': createSprite(tree3),
+    bush: createSprite(bush),
     'angel': createSprite(angel),
     'lep': createSprite(lep),
     'fence': createSprite(fence),
     'tall_grass': createSprite(tall_grass),
     'tall_grass_02': createSprite(tall_grass_02),
+    'tall_grass_03': createSprite(tall_grass_03),
     'arrow': createSprite(arrow),
     'cat': createSprite(cat),
     'stone': createSprite(stone),

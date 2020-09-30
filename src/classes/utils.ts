@@ -1,4 +1,4 @@
-import { Vector3 } from "three";
+import { Vec2, Vector3 } from "three";
 import { PathNode } from "./PathFinder";
 
 export const degToRad = (deg: number) => deg * (Math.PI/180);
@@ -22,6 +22,24 @@ export const setInMatrix = <T>(x: number, y: number, value: T, matrix: T[][]) =>
 
         matrix[x] = array;
     }
+}
+
+export const repeat = <T>(thing: T, times = 1): T[] => {
+    const repeated: T[] = [];
+    
+    for(let i = 0; i < times; i++) {
+        repeated.push(thing);
+    }
+
+    return repeated;
+}
+
+export const toVector3 = (position: Vec2): Vector3 => {
+    // берем ху з аргумєнта позішон
+    const {x, y} = position;
+    
+    // вертаєм новосозданий вектор з цими каардінатами
+    return new Vector3(x, 0, y);
 }
 
 export const approxVector3 = (a: Vector3, b: Vector3, speed = 5) => {

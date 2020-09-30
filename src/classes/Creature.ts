@@ -154,6 +154,6 @@ export class Creature extends Object3D implements IAnimated {
             this._body.rotation.setFromQuaternion(q.slerp(oldQ, 0));
         }
 
-        approxVector3(this._body.position, this.position, 4);
+        approxVector3(this._body.position, this.position, 6);
     }
 }

@@ -1,5 +1,9 @@
-import { WebGL1Renderer, Scene, FogExp2, Object3D, PerspectiveCamera, Vector3, DirectionalLight, AmbientLight, Camera, Color, WebGLRenderer } from "three";
+import { WebGL1Renderer, Scene, FogExp2, Object3D, PerspectiveCamera, Vector3, DirectionalLight, AmbientLight, Camera, Color, WebGLRenderer, ReinhardToneMapping, ACESFilmicToneMapping, Vector2, CameraHelper, PCFSoftShadowMap, BasicShadowMap, PCFShadowMap } from "three";
 import { LevelBuilder } from "./LevelBuilder";
+import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer';
+import {SSAOPass} from 'three/examples/jsm/postprocessing/SSAOPass';
+import {UnrealBloomPass} from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass';
 import { DEMO_LEVEL } from "../levels/DEMO";
 import { CatBarn } from "../levels/CatBarn";
 import { IAnimated } from "../types";
@@ -7,31 +11,45 @@ import { MAP_01 } from "../levels/MAP_01";
 
 const level = DEMO_LEVEL;
 
-export class MainRenderer extends WebGL1Renderer {
+export class MainRenderer extends WebGLRenderer {
   private _scene: Scene;
   private _camera = new PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
 
   private _animateTargets: IAnimated[] = [];
 
+  private _sun: DirectionalLight;
+  private _sunHelper?: CameraHelper;
+
   constructor() {
-    super();
+    super({
+      antialias: true,
+    });
 
+    this.toneMapping = ReinhardToneMapping;
     this._scene = new Scene();
-    this._scene.fog = new FogExp2(0xaaaaaa, 0.3);
+    this._scene.fog = new FogExp2(0x4b8bfd, 0.02);
 
-    this._camera.position.z = 5;
-    this._camera.position.x = 2;
+    this.setClearColor(0x4b8bfd);
 
-    this.setClearColor(0xaaaaaa);
+    this._sun = new DirectionalLight(0xf1ba4a, 10);
 
-    this.add(this._camera);
+    this._sun.position.set(400, 5, 30);
 
-    const sun = new DirectionalLight(0xbbbaaa, 2.02);
+    this.shadowMap.enabled = true;
+    this.shadowMap.type = PCFSoftShadowMap;
 
-    sun.position.add(new Vector3(1,0,0));
-    sun.castShadow = true;
+    this._sun.castShadow = true;
+    this._sun.shadow.bias = 0;
+    this._sun.shadow.camera.top = 15;
+    this._sun.shadow.camera.bottom = -15;
+    this._sun.shadow.camera.left = 15;
+    this._sun.shadow.camera.right = -15;
 
-    this.add(sun, new AmbientLight(0xaaaadd, 0.9));
+    this._sun.shadow.mapPass = new Vector2(4048, 4048);
+
+    this._sunHelper = new CameraHelper(this._sun.shadow.camera);
+
+    this.add(this._sun, new AmbientLight(0x4b8bfd, 1));
 
     new LevelBuilder(level, this);
   }
@@ -58,6 +76,15 @@ export class MainRenderer extends WebGL1Renderer {
 
   public animate() {
     this._animateTargets.forEach((target) => target.animate());
+
+    const cameraWorldPosition = this._camera.position.clone();
+
+    this._sun.position.set(
+      cameraWorldPosition.x - 18,
+      cameraWorldPosition.y + 14,
+      cameraWorldPosition.z - 5,
+    );
+    this._sun.target = this._camera;
 
     this.render(this._scene, this._camera);
   }
