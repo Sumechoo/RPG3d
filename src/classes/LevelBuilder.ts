@@ -13,18 +13,21 @@ import { PrepareBoxGeometry } from "./GeometryPreparators";
 
 export const GEOMETRY_RESOURCES = {
     // TODO: Collect info about static sprites amount to proper init of resources
-    grass_01: new InstancedGeometry(IMAGE_ASSETS.tall_grass, 1, 60000, true),
-    grass_02: new InstancedGeometry(IMAGE_ASSETS.tall_grass_02, 2, 60000, true),
-    grass_03: new InstancedGeometry(IMAGE_ASSETS.tall_grass_03, 1, 22000, true),
-    bush: new InstancedGeometry(IMAGE_ASSETS.bush, 1, 2500, true),
+    grass_01: new InstancedGeometry(IMAGE_ASSETS.tall_grass, .3, 50000, true),
+    grass_02: new InstancedGeometry(IMAGE_ASSETS.tall_grass_02, .3, 50000, true),
+    grass_03: new InstancedGeometry(IMAGE_ASSETS.tall_grass_03, .3, 18000, true),
+    grass_04: new InstancedGeometry(IMAGE_ASSETS.tall_grass_03, .4, 2000, true),
+    bush: new InstancedGeometry(IMAGE_ASSETS.bush, 1, 2000, true),
+    bush_02: new InstancedGeometry(IMAGE_ASSETS.bush2, 1, 10, true),
 
-    wall: new InstancedGeometry(IMAGE_ASSETS.window_old, 1, 500, false, true, PrepareBoxGeometry),
-    asphalt: new InstancedGeometry(IMAGE_ASSETS.actual_grass, 1, 4000, false, true, PrepareBoxGeometry),
-    fence: new InstancedGeometry(IMAGE_ASSETS.fence, 1, 500),
+    wall: new InstancedGeometry(IMAGE_ASSETS.window_old, .1, 300, false, true, PrepareBoxGeometry),
+    asphalt: new InstancedGeometry(IMAGE_ASSETS.actual_grass, 1, 1100, false, true, PrepareBoxGeometry),
+    fence: new InstancedGeometry(IMAGE_ASSETS.fence, 1, 200),
     
-    tree_01: new InstancedGeometry(IMAGE_ASSETS.tree, 4, 200, true),
-    tree_02: new InstancedGeometry(IMAGE_ASSETS.tree2, 5, 200, true),
-    tree_03: new InstancedGeometry(IMAGE_ASSETS.tree3, 4, 200,true),
+    tree_01: new InstancedGeometry(IMAGE_ASSETS.tree, 4, 100, true),
+    tree_02: new InstancedGeometry(IMAGE_ASSETS.tree2, 6, 100, true),
+    tree_03: new InstancedGeometry(IMAGE_ASSETS.tree3, 3, 100,true),
+    tree_04: new InstancedGeometry(IMAGE_ASSETS.tree3, 2, 100,true),
 }
 
 export class LevelBuilder {
@@ -136,6 +139,15 @@ export class LevelBuilder {
 
     public getPath = (start: Vec2, end: Vec2) => this._pathFinder.getPath(start, end);
 
+    public disposeLevel = () => {
+        console.info('DISPOSING!');
+
+        this._renderer.clearScene();
+
+        const resourcesArray = Object.values(GEOMETRY_RESOURCES);
+        resourcesArray.forEach((resource) => resource.dispose());
+    }
+    
     public lockPosition = (x: number, y: number, by: Creature) => {
         setInMatrix(x, y, by, this._positionsMatrix);
     }

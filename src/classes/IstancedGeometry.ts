@@ -14,11 +14,14 @@ export class InstancedGeometry extends Object3D {
 
 	private _instanceCount = 0;
 
+	private _size: number;
+
     constructor(texture: MeshPhysicalMaterial, size = 1, count = 200, cross = false, shadow = true, preparator = PreparePlaneGeomentry) {
         super();
 
 		const buffer = new InstancedBufferGeometry();
-		
+
+		this._size = size;
 		this._bufferedGeometry = buffer;
 		this._cross = cross;
         
@@ -72,8 +75,14 @@ export class InstancedGeometry extends Object3D {
         this.add(sprite);
 	}
 
+	public dispose = () => {
+		this._instanceCount = 0;
+		this._bufferedGeometry.dispose();
+	}
+
 	public addInstance = (at: Vector3, size = 1, facing = 0) => {
-		// return;
+
+		size = Math.max(size, this._size);
 
 		var matrix = new Matrix4();
         var offset = new Vector3();
@@ -93,12 +102,12 @@ export class InstancedGeometry extends Object3D {
 			orientation.setFromEuler(new Euler(0, degToRad(facing + 90), 0));
 			orientation.set( orientation.x, orientation.y, orientation.z, orientation.w ).normalize();
 			matrix.compose( offset, orientation, scale );	
+		
+			this._bufferMesh.setMatrixAt( this._instanceCount + 1, matrix );
+        	this._bufferMesh.instanceMatrix.needsUpdate = true;
 		}
 
-		this._bufferMesh.setMatrixAt( this._instanceCount + 1, matrix );
-        this._bufferMesh.instanceMatrix.needsUpdate = true;
-
-		this._instanceCount += 2;
+		this._instanceCount += this._cross ? 2 : 1;
 	}
 	
 	public finalize = () => {

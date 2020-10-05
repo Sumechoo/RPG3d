@@ -8,6 +8,7 @@ import actual_grass from './forest_floor.png';
 import tall_grass from './tall_grass.png';
 import tall_grass_02 from './tall_grass2.png';
 import tall_grass_03 from './tall_grass3.png';
+import tall_grass_04 from './tall_grass4.png';
 import tree from './tree.png';
 import tree2 from './tree2.png';
 import tree3 from './tree3.png';
@@ -19,6 +20,7 @@ import lep from './lep.png';
 import arrow from './arrow.png';
 import cat from './cat.png';
 import bush from './bush.png';
+import bush2 from './bush2.png';
 import stone from './stone.png';
 import { TextureLoader, MeshStandardMaterial, NearestFilter, DoubleSide, MeshBasicMaterial, MeshPhysicalMaterial } from 'three';
 
@@ -31,6 +33,7 @@ const createTexture = (t: string) => {
         map: texture,
         bumpMap: texture,
         bumpScale: 0.1,
+        roughnessMap: texture,
     });
 }
 
@@ -44,7 +47,6 @@ const createSprite = (t: string) => {
         alphaTest: 0.09,
         side: DoubleSide,
         dithering: true,
-        
     });
 }
 
@@ -59,16 +61,19 @@ export const IMAGE_ASSETS = {
     'beton_wall': createTexture(beton_wall),
     actual_grass: createTexture(actual_grass),
 
+
     'tree': createSprite(tree),
     'tree2': createSprite(tree2),
     'tree3': createSprite(tree3),
     bush: createSprite(bush),
+    bush2: createSprite(bush2),
     'angel': createSprite(angel),
     'lep': createSprite(lep),
     'fence': createSprite(fence),
     'tall_grass': createSprite(tall_grass),
     'tall_grass_02': createSprite(tall_grass_02),
     'tall_grass_03': createSprite(tall_grass_03),
+    'tall_grass_04': createSprite(tall_grass_04),
     'arrow': createSprite(arrow),
     'cat': createSprite(cat),
     'stone': createSprite(stone),

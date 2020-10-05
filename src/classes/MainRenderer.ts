@@ -1,4 +1,4 @@
-import { WebGL1Renderer, Scene, FogExp2, Object3D, PerspectiveCamera, Vector3, DirectionalLight, AmbientLight, Camera, Color, WebGLRenderer, ReinhardToneMapping, ACESFilmicToneMapping, Vector2, CameraHelper, PCFSoftShadowMap, BasicShadowMap, PCFShadowMap } from "three";
+import { WebGL1Renderer, Scene, FogExp2, Object3D, PerspectiveCamera, Vector3, DirectionalLight, AmbientLight, Camera, Color, WebGLRenderer, ReinhardToneMapping, ACESFilmicToneMapping, Vector2, CameraHelper, PCFSoftShadowMap, BasicShadowMap, PCFShadowMap, VSMShadowMap } from "three";
 import { LevelBuilder } from "./LevelBuilder";
 import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer';
 import {SSAOPass} from 'three/examples/jsm/postprocessing/SSAOPass';
@@ -18,7 +18,6 @@ export class MainRenderer extends WebGLRenderer {
   private _animateTargets: IAnimated[] = [];
 
   private _sun: DirectionalLight;
-  private _sunHelper?: CameraHelper;
 
   constructor() {
     super({
@@ -31,7 +30,7 @@ export class MainRenderer extends WebGLRenderer {
 
     this.setClearColor(0x4b8bfd);
 
-    this._sun = new DirectionalLight(0xf1ba4a, 10);
+    this._sun = new DirectionalLight(0xf1ba4a, 6);
 
     this._sun.position.set(400, 5, 30);
 
@@ -39,19 +38,27 @@ export class MainRenderer extends WebGLRenderer {
     this.shadowMap.type = PCFSoftShadowMap;
 
     this._sun.castShadow = true;
-    this._sun.shadow.bias = 0;
-    this._sun.shadow.camera.top = 15;
-    this._sun.shadow.camera.bottom = -15;
-    this._sun.shadow.camera.left = 15;
-    this._sun.shadow.camera.right = -15;
-
+    this._sun.shadow.bias = .0000001;
+    this._sun.shadow.camera.top = 10;
+    this._sun.shadow.camera.bottom = -10;
+    this._sun.shadow.camera.left = 10;
+    this._sun.shadow.camera.right = -10;
     this._sun.shadow.mapPass = new Vector2(4048, 4048);
-
-    this._sunHelper = new CameraHelper(this._sun.shadow.camera);
 
     this.add(this._sun, new AmbientLight(0x4b8bfd, 1));
 
-    new LevelBuilder(level, this);
+    const oldLevel = new LevelBuilder(level, this);
+  
+    // setTimeout(() => {
+    //   setTimeout(() => {
+    //     oldLevel.disposeLevel();
+    //     new LevelBuilder(MAP_01, this);
+    //   }, 2000);
+    // }, 2000);
+  }
+
+  public clearScene() {
+    this._scene.remove(...this._scene.children);
   }
 
   public add(...objects: Object3D[]) {
@@ -81,7 +88,7 @@ export class MainRenderer extends WebGLRenderer {
 
     this._sun.position.set(
       cameraWorldPosition.x - 18,
-      cameraWorldPosition.y + 14,
+      cameraWorldPosition.y + 30,
       cameraWorldPosition.z - 5,
     );
     this._sun.target = this._camera;
