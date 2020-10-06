@@ -1,41 +1,45 @@
 import { WebGL1Renderer, Scene, FogExp2, Object3D, PerspectiveCamera, Vector3, DirectionalLight, AmbientLight, Camera, Color, WebGLRenderer, ReinhardToneMapping, ACESFilmicToneMapping, Vector2, CameraHelper, PCFSoftShadowMap, BasicShadowMap, PCFShadowMap, VSMShadowMap } from "three";
 import { LevelBuilder } from "./LevelBuilder";
-import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer';
-import {SSAOPass} from 'three/examples/jsm/postprocessing/SSAOPass';
-import {UnrealBloomPass} from 'three/examples/jsm/postprocessing/UnrealBloomPass';
-import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass';
-import { DEMO_LEVEL } from "../levels/DEMO";
-import { CatBarn } from "../levels/CatBarn";
-import { IAnimated } from "../types";
-import { MAP_01 } from "../levels/MAP_01";
+import { DEMO_01 } from "../levels/DEMO_01";
+import { IAnimated, Level, LevelParams } from "../types";
 
-const level = DEMO_LEVEL;
+const level = DEMO_01;
 
 export class MainRenderer extends WebGLRenderer {
   private _scene: Scene;
   private _camera = new PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-
   private _animateTargets: IAnimated[] = [];
-
   private _sun: DirectionalLight;
+
+  private _currentLevel?: LevelBuilder;
 
   constructor() {
     super({
       antialias: true,
     });
 
-    this.toneMapping = ReinhardToneMapping;
+    this._sun = new DirectionalLight(0xf1ba4a, 4);
+    this._sun.add(new AmbientLight(0x4b8bfd, 5));
+
     this._scene = new Scene();
-    this._scene.fog = new FogExp2(0x4b8bfd, 0.02);
+    this._scene.fog = new FogExp2(0xaaaaaa, 0.07);
 
-    this.setClearColor(0x4b8bfd);
+    this.setupLighting();
+    // this.setClearColor(0x4b8bfd); // BLUE SKY
+    this.setClearColor(0xbbbbbb);
 
-    this._sun = new DirectionalLight(0xf1ba4a, 6);
+    this.changeLevel(level, {});
+  }
 
-    this._sun.position.set(400, 5, 30);
+  public changeLevel = (level: Level, params: LevelParams) => {
+    this._currentLevel?.disposeLevel();
+    this._currentLevel = new LevelBuilder(level, this, params);
+    this.setupLighting();
+  }
 
-    this.shadowMap.enabled = true;
-    this.shadowMap.type = PCFSoftShadowMap;
+  private setupLighting = () => {
+    this.toneMapping = ReinhardToneMapping;
+    this.toneMappingExposure = 0.3;
 
     this._sun.castShadow = true;
     this._sun.shadow.bias = .0000001;
@@ -45,20 +49,11 @@ export class MainRenderer extends WebGLRenderer {
     this._sun.shadow.camera.right = -10;
     this._sun.shadow.mapPass = new Vector2(4048, 4048);
 
-    this.add(this._sun, new AmbientLight(0x4b8bfd, 1));
-
-    const oldLevel = new LevelBuilder(level, this);
-  
-    // setTimeout(() => {
-    //   setTimeout(() => {
-    //     oldLevel.disposeLevel();
-    //     new LevelBuilder(MAP_01, this);
-    //   }, 2000);
-    // }, 2000);
+    this.add(this._sun);
   }
 
   public clearScene() {
-    this._scene.remove(...this._scene.children);
+    this._scene?.remove(...this._scene.children);
   }
 
   public add(...objects: Object3D[]) {

@@ -1,4 +1,4 @@
-import { PerspectiveCamera, Vector3, Vec2 } from "three";
+import { PerspectiveCamera, Vector3, Vec2, SpotLight } from "three";
 import { degToRad } from "./utils";
 import { Creature, CreatureParams } from "./Creature";
 import { StepEvent } from "./Stepper";
@@ -13,25 +13,31 @@ export class PlayerController extends Creature {
         super({...params});
 
         this._body = this._camera;
-
-        document.addEventListener('keydown', (event) => {
-            this._camera.getWorldDirection(forward);
-            this._camera.updateProjectionMatrix();
-
-            const newPositionCandidate = new Vector3(); 
-            newPositionCandidate.copy(this.position);
-
-            if(event.key === 'w') newPositionCandidate.add(forward);
-            if(event.key === 's') newPositionCandidate.sub(forward);
-            if(event.key === 'a') this.rotateY(degToRad(90));
-            if(event.key === 'd') this.rotateY(degToRad(-90));
-
-            this._newPositionCandidate = newPositionCandidate;
-
-            document.dispatchEvent(StepEvent);
-        });
-
         this._supportRotation = true;
+
+        document.addEventListener('keydown', this.listenKeys);
+    }
+
+    private listenKeys = (event: KeyboardEvent) => {
+        this._camera.getWorldDirection(forward);
+        this._camera.updateProjectionMatrix();
+
+        const newPositionCandidate = new Vector3(); 
+        newPositionCandidate.copy(this.position);
+
+        if(event.key === 'w') newPositionCandidate.add(forward);
+        if(event.key === 's') newPositionCandidate.sub(forward);
+        if(event.key === 'a') this.rotateY(degToRad(90));
+        if(event.key === 'd') this.rotateY(degToRad(-90));
+        if(event.key === 'e') {
+            const at = newPositionCandidate.add(forward);
+
+            this._currentLevel.callActionAt({x: at.x, y: at.z});
+        }
+
+        this._newPositionCandidate = newPositionCandidate;
+
+        document.dispatchEvent(StepEvent);
     }
 
     protected prepareStepCandidate = () => {
@@ -40,6 +46,10 @@ export class PlayerController extends Creature {
         }
 
         this.setStepCandidate({x: this._newPositionCandidate.x, y: this._newPositionCandidate.z});
+    }
+
+    public dispose() {
+        document.removeEventListener('keydown', this.listenKeys);
     }
 
     public getCamera() {

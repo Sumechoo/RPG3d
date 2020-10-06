@@ -40,6 +40,7 @@ const createTexture = (t: string) => {
 const createSprite = (t: string) => {
     const texture = loader.load(t);
     texture.flipY = true;
+    texture.anisotropy = 8;
 
     return new MeshPhysicalMaterial({
         map: texture,

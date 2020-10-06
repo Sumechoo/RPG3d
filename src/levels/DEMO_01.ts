@@ -1,18 +1,16 @@
-import { Level, TileConfig, TileFormat } from "../../types";
-import {Cat} from '../../classes/mobs/Cat';
-import { repeat } from "../../classes/utils";
-import { GEOMETRY_RESOURCES } from "../../classes/LevelBuilder";
+import { Level, TileConfig } from "../types";
+import { repeat } from "../classes/utils";
+import { GEOMETRY_RESOURCES } from "../classes/LevelBuilder";
 
-export const DEMO_LEVEL: Level = {
+export const DEMO_01: Level = {
     map: `
-            T   TTT T T    TTT TT TTTTT T TTT T T TT    T TTT T T
+           T   TTT T T    TTT TT TTTTT T TTT T T TT    T TTT T T
 
         wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
      T  w_____________________________________________________w   T
     T   w_____________T_______________________________________w   T
     T wwwF_FFFFFFFFFFFFF_FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFwwww
-     wAAAAAAAAAAAAAAAAAAAAAAAAAAAA@AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwT
-     wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAw
+     EAAAAAAAAAAAAAAAAAAAAAAAAAAAA@AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAET
      TwwwFFpFFwwwwAAAAAAAwFFFFFFpFFFFFFFFFFFFFFpFFFFFFFAAAAAAAwwww
     T   w__p__w  wFFFAwFFF______p__________f___p_______AAAAAAAwBBBBB
      T  w__p__wwww___Af_________p__________f___p_______AAAAAAAwBww
@@ -30,27 +28,42 @@ export const DEMO_LEVEL: Level = {
     T   wppf__T____fppppf_______p_______T_wFFpFFFFFFw___________w
      T  wppf_______fppppf_______pppppppppppppp_f________________w  T
      T  wpppppppppppppppf______________________f________________w  T
-        wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+     T  w__f____________f______________________f________________w  T
+        wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
       TT        
     TTTTTT  TTTTTTTT   TTTT TTTTT TTTTTTTTT   TTT   TTT  T T TTT TT T
 
     L                   L                       L                   L   
     `,
     configs: {
+        D: {
+            // For debug purpose only
+            includes: ['_'],
+            tileConfig: [],
+            action: function (position) {
+                console.info('Debug position:', position);
+            }
+        },
+        E: {
+            includes: ['w', 'w'],
+            tileConfig: [],
+            action: function () {
+                this.getRenderer().changeLevel(DEMO_01, {spawnPosition: {x: 2, y: 2}});
+            }
+        },
         '@': {
             includes: ['A'],
             tileConfig: [],
         },
         'w': {
             tileConfig: [
-                {texture: 'beton_wall', yShift: () => .2, size: 2},
-                {texture: 'beton_wall'},
+                {geometry: ['asphalt'], yShift: () => .2, size: 1.1},
+                {geometry: ['asphalt']},
             ]
         },
         'L': {
-            tileConfig: [
-                {texture: 'lep', size: 15, format: TileFormat.SPRITE, yShift: () => 8},
-            ]
+            includes: ['_'],
+            tileConfig: [],
         },
         'f': {
             includes: ['_'],
@@ -66,7 +79,7 @@ export const DEMO_LEVEL: Level = {
         },
         '_': {
             tileConfig: [
-                {isWalkable: true, geometry: ['asphalt'], yShift: () => Math.random() / 8},
+                {isWalkable: true, geometry: ['dirt'], yShift: () => Math.random() / 8},
                 {
                     yShift: () => -0.4,
                     isWalkable: true,
@@ -91,7 +104,6 @@ export const DEMO_LEVEL: Level = {
         },
         'T': {
             includes: ['_'],
-            // tileConfig: [],
             tileConfig: [
                 {
                     geometry: ['tree_01', 'tree_02', 'tree_03', 'tree_04'],
@@ -103,14 +115,13 @@ export const DEMO_LEVEL: Level = {
             ]
         },
         'A': {
-            // spawns: Cat,
             tileConfig: [
-                {texture: 'asphalt', yShift: () => 0.05, isWalkable: true}
+                {geometry: ['asphalt'], yShift: () => 0.05, isWalkable: true}
             ]
         },
         'B': {
             tileConfig : [
-                {texture: 'beton_wall', yShift: () => 0.5, size: 1.1},
+                {geometry: ['asphalt'], yShift: () => 0.5, size: 1.1},
                 ...repeat<TileConfig>({geometry: ['wall']}, 5),
             ]
         }
