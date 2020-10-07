@@ -116,8 +116,6 @@ export class InstancedGeometry extends Object3D {
 		this._bufferedGeometry.setAttribute( 'normal', new Float32BufferAttribute( this._normals, 3 ) );
 		this._bufferedGeometry.setAttribute( 'uv', new Float32BufferAttribute( this._uvs, 2 ) );
 
-		this._bufferMesh.instanceMatrix.needsUpdate = true;
-		
-		console.info('Finalizing with:', this._instanceCount);
+		this._bufferMesh.instanceMatrix.needsUpdate = true;		
 	}
 }

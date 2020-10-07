@@ -1,4 +1,4 @@
-import {GEOMETRY_RESOURCES, LevelBuilder} from './classes/LevelBuilder';
+import {getGeometryResources, LevelBuilder} from './classes/LevelBuilder';
 import { Creature } from "./classes/Creature";
 import { Vec2 } from 'three';
 
@@ -25,11 +25,13 @@ export enum TileFormat {
     SPRITE,
 }
 
+export type GeometryResourcesMap = ReturnType<typeof getGeometryResources>;
+
 export interface TileConfig {
     isWalkable?: boolean;
     isHairy?: boolean;
     yShift?: () => number;
-    geometry?: Array<keyof typeof GEOMETRY_RESOURCES>;
+    geometry?: Array<keyof GeometryResourcesMap>;
     size?: number;
     facing?: () => number;
 }

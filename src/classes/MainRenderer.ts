@@ -11,6 +11,8 @@ export class MainRenderer extends WebGLRenderer {
   private _animateTargets: IAnimated[] = [];
   private _sun: DirectionalLight;
 
+  private time = 0;
+
   private _currentLevel?: LevelBuilder;
 
   constructor() {
@@ -18,23 +20,29 @@ export class MainRenderer extends WebGLRenderer {
       antialias: true,
     });
 
-    this._sun = new DirectionalLight(0xf1ba4a, 4);
-    this._sun.add(new AmbientLight(0x4b8bfd, 5));
+    this._sun = new DirectionalLight(0xF3BD5D, 10);
+    this._sun.add(new AmbientLight(0x2b8bff, 3));
 
     this._scene = new Scene();
-    this._scene.fog = new FogExp2(0xaaaaaa, 0.07);
+    this._scene.fog = new FogExp2(0x888888, 0.02);
+
+    this.shadowMap.enabled = true;
+    this.shadowMap.type = PCFSoftShadowMap;
 
     this.setupLighting();
-    // this.setClearColor(0x4b8bfd); // BLUE SKY
-    this.setClearColor(0xbbbbbb);
+    this.setClearColor(0x4b8bfd); // BLUE SKY
+    // this.setClearColor(0xF3BD5D); // EVENING
+    // this.setClearColor(0xbbbbbb);
 
-    this.changeLevel(level, {});
+    this.changeLevel(level, {spawnPosition: {x: 7, y: 34}});
   }
 
   public changeLevel = (level: Level, params: LevelParams) => {
     this._currentLevel?.disposeLevel();
     this._currentLevel = new LevelBuilder(level, this, params);
     this.setupLighting();
+
+    // setTimeout(() => this.changeLevel(level, {spawnPosition: {x: 7, y: 34}}), 7000);
   }
 
   private setupLighting = () => {
@@ -47,7 +55,7 @@ export class MainRenderer extends WebGLRenderer {
     this._sun.shadow.camera.bottom = -10;
     this._sun.shadow.camera.left = 10;
     this._sun.shadow.camera.right = -10;
-    this._sun.shadow.mapPass = new Vector2(4048, 4048);
+    this._sun.shadow.mapPass = new Vector2(2048, 2048);
 
     this.add(this._sun);
   }
@@ -77,14 +85,15 @@ export class MainRenderer extends WebGLRenderer {
   }
 
   public animate() {
+
     this._animateTargets.forEach((target) => target.animate());
 
     const cameraWorldPosition = this._camera.position.clone();
 
     this._sun.position.set(
-      cameraWorldPosition.x - 18,
-      cameraWorldPosition.y + 30,
-      cameraWorldPosition.z - 5,
+      cameraWorldPosition.x + 10,
+      cameraWorldPosition.y + 13,
+      cameraWorldPosition.z - 15,
     );
     this._sun.target = this._camera;
 

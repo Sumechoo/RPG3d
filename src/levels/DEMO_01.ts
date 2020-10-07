@@ -1,55 +1,49 @@
-import { Level, TileConfig } from "../types";
+import { GeometryResourcesMap, Level, TileConfig } from "../types";
 import { repeat } from "../classes/utils";
-import { GEOMETRY_RESOURCES } from "../classes/LevelBuilder";
+import { DEMO_02 } from "./DEMO_02";
 
 export const DEMO_01: Level = {
     map: `
            T   TTT T T    TTT TT TTTTT T TTT T T TT    T TTT T T
 
         wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-     T  w_____________________________________________________w   T
-    T   w_____________T_______________________________________w   T
-    T wwwF_FFFFFFFFFFFFF_FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFwwww
-     EAAAAAAAAAAAAAAAAAAAAAAAAAAAA@AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAET
-     TwwwFFpFFwwwwAAAAAAAwFFFFFFpFFFFFFFFFFFFFFpFFFFFFFAAAAAAAwwww
-    T   w__p__w  wFFFAwFFF______p__________f___p_______AAAAAAAwBBBBB
-     T  w__p__wwww___Af_________p__________f___p_______AAAAAAAwBww
-     T  w__p_________Af_________p__________f___p_______AAAAAAAAB_w
-     T  w__p_________Af_________p____T_____f_T_p_______________B_w
-    TT  w__ppppppppppAf_________p__T_TT_T_wFFFFpFFFFw_T________BBBBB
-    T   w_______T_T__Af____T____p_________fAAAAAAAAAf____________w  T
-    T   w_______T_T__Af____T____p_________fAAAAABBBBf____________w  T
-     T  w___T__T___T_Af_________p__T____T_fAAAAAB  Bf____________w   T
-     wwww____________AppppppppppppppppppppfAAAAAB  BfT___________w    T
-     wAAAAAAAAAAAAAAAAf___p_____p___T___T_fAAAAAB  Bf____________w
-     wwww__________wwwwww_p_____p_T_____T_fAAAAAB  Bf____________w 
-     T  wFFw_T_____fppppppp_____p___T_T_T_fAAAAABBBBf____________w
-     T  wppf_T_____fppppppp_____p___T_T_T_fAAAAAAAAAf____________w
-    T   wppf__T____fppppf_______p_______T_wFFpFFFFFFw___________w
-     T  wppf_______fppppf_______pppppppppppppp_f________________w  T
-     T  wpppppppppppppppf______________________f________________w  T
-     T  w__f____________f______________________f________________w  T
-        wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+     T  w______________________________________________________w   T
+    T   w_____________T________________________________________w   T
+    T   w__FFFFFFFFFFFFF_FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFwww
+        w__pAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAET
+     T  w__pFFwwwwAAAAAAAwFFFFFFpFFFFFFFFFFFFFFpFFFFFFwAAAAAAAAwww
+    T   w__p__w  wFFFAwFFF______p__________f___pf_____fAAAAAAAABBBBB
+     T  w__p__wwww___Af_________p__________f___pf_____fAAAAAAAAB
+     T  w__p_________Af_________p__________f___pf_____fAAAAAAAAB
+     T  w__p_________Af_________p____T_____f_T_pf____wwwwEwEwEwB
+    TT  w__ppppppppppAf_________p__T_TT_T_wFFFFpFFFFFw__BBBBBBBBBBBBB
+    T   w_______T_T__Af____T____p_________fAAAAAAAAAAf_TB
+    T   w_______T_T__Af____T____p_________fAAAAABBBBAf__B
+     T  w___T__T___T_Af_________p__T____T_fAAAAAB  BAf__B
+     wwww____________AppppppppppppppppppppfAAAAAD  BAfT_B
+     wAAAAAAAAAAAAAAAAf___p_____p___T___T_fAAAAAD  BAf__B
+     wwww__________wwwwww_p_____p_T_____T_fAAAAAB  BAf__B 
+     T  wFFw_T_____fppppppp_____p___T_T_T_fAAAAABBBBAf__B
+     T  wppf_T_____fppppppp_____p___T_T_T_fAAAAAAAAAAf__B
+    T   wppf__T____fppppf_______p_______T_wFFpwFFFFFFw__B
+     T  w__f____________f_______ppppppppppppppf_________B
+        wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwB
       TT        
     TTTTTT  TTTTTTTT   TTTT TTTTT TTTTTTTTT   TTT   TTT  T T TTT TT T
 
     L                   L                       L                   L   
     `,
     configs: {
-        D: {
-            // For debug purpose only
-            includes: ['_'],
-            tileConfig: [],
-            action: function (position) {
-                console.info('Debug position:', position);
+        E: {
+            includes: ['w'],
+            tileConfig: [{geometry: ['door_decale'], yShift: () => -1}],
+            action: function () {
+                this.getRenderer().changeLevel(DEMO_02, {spawnPosition: {x: 17, y: 9}});
             }
         },
-        E: {
-            includes: ['w', 'w'],
-            tileConfig: [],
-            action: function () {
-                this.getRenderer().changeLevel(DEMO_01, {spawnPosition: {x: 2, y: 2}});
-            }
+        D: {
+            includes: ['B'],
+            tileConfig: [{geometry: ['door_decale'], yShift: () => -2}],
         },
         '@': {
             includes: ['A'],
@@ -58,7 +52,7 @@ export const DEMO_01: Level = {
         'w': {
             tileConfig: [
                 {geometry: ['asphalt'], yShift: () => .2, size: 1.1},
-                {geometry: ['asphalt']},
+                {geometry: ['wall']},
             ]
         },
         'L': {
@@ -84,10 +78,10 @@ export const DEMO_01: Level = {
                     yShift: () => -0.4,
                     isWalkable: true,
                     geometry: [
-                        ...repeat<keyof typeof GEOMETRY_RESOURCES>('grass_01', 30),
-                        ...repeat<keyof typeof GEOMETRY_RESOURCES>('grass_02', 30),
-                        ...repeat<keyof typeof GEOMETRY_RESOURCES>('grass_03', 10),
-                        ...repeat<keyof typeof GEOMETRY_RESOURCES>('grass_04', 2),
+                        ...repeat<keyof GeometryResourcesMap>('grass_01', 30),
+                        ...repeat<keyof GeometryResourcesMap>('grass_02', 30),
+                        ...repeat<keyof GeometryResourcesMap>('grass_03', 10),
+                        ...repeat<keyof GeometryResourcesMap>('grass_04', 2),
                         'bush',
                         // 'bush_02',
                     ],
@@ -116,13 +110,14 @@ export const DEMO_01: Level = {
         },
         'A': {
             tileConfig: [
-                {geometry: ['asphalt'], yShift: () => 0.05, isWalkable: true}
+                {geometry: ['asphalt'], yShift: () => 0.05, isWalkable: true},
             ]
         },
         'B': {
             tileConfig : [
-                {geometry: ['asphalt'], yShift: () => 0.5, size: 1.1},
-                ...repeat<TileConfig>({geometry: ['wall']}, 5),
+                {geometry: ['asphalt'], yShift: () => 0.2, size: 1.1},
+                ...repeat<TileConfig>({geometry: ['wall']}, 3),
+                {geometry: ['window_decale'], yShift: () => -2},
             ]
         }
     }

@@ -3,6 +3,8 @@ import floor_stone from './floor_stone.png';
 import floor_wood from './floor_wood.jpg';
 import brick_wall from './brick_wall.jpg';
 import window_old from './window_old.jpg';
+import window_decale from './window_decale.png';
+import door_decale from './door_decale.png';
 import grass from './grass.png';
 import actual_grass from './forest_floor.png';
 import tall_grass from './tall_grass.png';
@@ -14,6 +16,7 @@ import tree2 from './tree2.png';
 import tree3 from './tree3.png';
 import fence from './fence.png';
 import angel from './angel.png';
+import corn from './corn.png';
 import beton_wall from './beton_wall.png';
 import asphalt from './asphalt.jpg';
 import lep from './lep.png';
@@ -26,14 +29,17 @@ import { TextureLoader, MeshStandardMaterial, NearestFilter, DoubleSide, MeshBas
 
 const loader = new TextureLoader();
 
-const createTexture = (t: string) => {
+const createTexture = (t: string, transparent = false) => {
     const texture = loader.load(t);
 
     return new MeshPhysicalMaterial({
         map: texture,
         bumpMap: texture,
-        bumpScale: 0.1,
+        bumpScale: 0.05,
         roughnessMap: texture,
+        alphaMap: transparent ? texture: undefined,
+        alphaTest: transparent ? 0.09 : undefined,
+        dithering: true,
     });
 }
 
@@ -62,7 +68,10 @@ export const IMAGE_ASSETS = {
     'beton_wall': createTexture(beton_wall),
     actual_grass: createTexture(actual_grass),
 
+    window_decale: createTexture(window_decale, true),
+    door_decale: createTexture(door_decale, true),
 
+    corn: createSprite(corn),
     'tree': createSprite(tree),
     'tree2': createSprite(tree2),
     'tree3': createSprite(tree3),

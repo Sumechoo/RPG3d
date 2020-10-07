@@ -110,7 +110,6 @@ export class Creature extends Object3D implements IAnimated {
     protected prepareStepCandidate = () => {};
 
     protected doStep = () => {
-        console.info(this.name, 'doin step with', this._properties.health);
         if(this._properties.health <= 0) {
             this._currentLevel.removeCreature(this);
             document.removeEventListener('sysStep', this.doStep);
