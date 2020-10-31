@@ -42,6 +42,11 @@ export const toVector3 = (position: Vec2): Vector3 => {
     return new Vector3(x, 0, y);
 }
 
+export const toVec2 = (position: Vector3) : Vec2 => {
+    const {x,y}=position;
+    return {x,y};
+   }
+
 export const approxVector3 = (a: Vector3, b: Vector3, speed = 5) => {
     a.x += (b.x - a.x) / speed;
     a.z += (b.z - a.z) / speed;

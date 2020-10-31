@@ -1,6 +1,6 @@
 import { Object3D, Vec2, Vector3, Quaternion } from "three";
 import { IAnimated } from "../types";
-import { approxVector3 } from "./utils";
+import { approxVector3, toVec2, toVector3 } from "./utils";
 import { LevelBuilder } from "./LevelBuilder";
 import { Sprite } from "./Sprite";
 import { IMAGE_ASSETS } from "../assets/images";
@@ -128,8 +128,7 @@ export class Creature extends Object3D implements IAnimated {
 
     public setPosition({x, y}: Vec2): boolean {
         const old = this._stepCandidate?.old ?? {x: 0, y: 0};
-
-        this.position.set(x, this.position.y, y);
+        this.position.set(toVector3({x,y}), this.position.y);
         this._currentLevel.unlockPosition(old.x, old.y);
         this._currentLevel.lockPosition(x, y, this);
 
