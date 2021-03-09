@@ -16,7 +16,7 @@ export class InstancedGeometry extends Object3D {
 
 	private _size: number;
 
-    constructor(texture: MeshPhysicalMaterial, size = 1, count = 200, cross = false, shadow = true, preparator = PreparePlaneGeomentry) {
+    constructor(texture: any, size = 1, count = 200, cross = false, shadow = true, preparator = PreparePlaneGeomentry) {
         super();
 
 		const buffer = new InstancedBufferGeometry();

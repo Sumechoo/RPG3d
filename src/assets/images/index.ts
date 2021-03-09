@@ -25,35 +25,41 @@ import cat from './cat.png';
 import bush from './bush.png';
 import bush2 from './bush2.png';
 import stone from './stone.png';
-import { TextureLoader, MeshStandardMaterial, NearestFilter, DoubleSide, MeshBasicMaterial, MeshPhysicalMaterial } from 'three';
+import { TextureLoader, DoubleSide, ShaderMaterial } from 'three';
+import { FRAGMENT_SHADER, VERTEX_SHADER } from './shaders';
 
 const loader = new TextureLoader();
 
 const createTexture = (t: string, transparent = false) => {
     const texture = loader.load(t);
 
-    return new MeshPhysicalMaterial({
-        map: texture,
-        bumpMap: texture,
-        bumpScale: 0.05,
-        roughnessMap: texture,
-        alphaMap: transparent ? texture: undefined,
-        alphaTest: transparent ? 0.09 : undefined,
-        dithering: true,
+    return new ShaderMaterial({
+        uniforms: {
+            map: {value: texture},
+            uTime: {value: 0},
+            wobble: {value: false},
+        },
+
+        vertexShader: VERTEX_SHADER,
+        fragmentShader: FRAGMENT_SHADER,
     });
 }
 
-const createSprite = (t: string) => {
+const createSprite = (t: string, wobble = true) => {
     const texture = loader.load(t);
     texture.flipY = true;
-    texture.anisotropy = 8;
+    texture.anisotropy = 16;
 
-    return new MeshPhysicalMaterial({
-        map: texture,
-        alphaMap: texture,
-        alphaTest: 0.09,
+    return new ShaderMaterial({
+        uniforms: {
+            map: {value: texture},
+            uTime: {value: 0},
+            wobble: {value: wobble},
+        },
         side: DoubleSide,
-        dithering: true,
+
+        vertexShader: VERTEX_SHADER,
+        fragmentShader: FRAGMENT_SHADER,
     });
 }
 
@@ -79,7 +85,7 @@ export const IMAGE_ASSETS = {
     bush2: createSprite(bush2),
     'angel': createSprite(angel),
     'lep': createSprite(lep),
-    'fence': createSprite(fence),
+    'fence': createSprite(fence, false),
     'tall_grass': createSprite(tall_grass),
     'tall_grass_02': createSprite(tall_grass_02),
     'tall_grass_03': createSprite(tall_grass_03),

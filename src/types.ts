@@ -33,6 +33,7 @@ export interface TileConfig {
     yShift?: () => number;
     geometry?: Array<keyof GeometryResourcesMap>;
     size?: number;
+    height?: number;
     facing?: () => number;
 }
 

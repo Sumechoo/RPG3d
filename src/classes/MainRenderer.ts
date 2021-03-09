@@ -1,4 +1,4 @@
-import { WebGL1Renderer, Scene, FogExp2, Object3D, PerspectiveCamera, Vector3, DirectionalLight, AmbientLight, Camera, Color, WebGLRenderer, ReinhardToneMapping, ACESFilmicToneMapping, Vector2, CameraHelper, PCFSoftShadowMap, BasicShadowMap, PCFShadowMap, VSMShadowMap } from "three";
+import { WebGL1Renderer, Scene, FogExp2, Object3D, PerspectiveCamera, Vector3, DirectionalLight, AmbientLight, Camera, Color, WebGLRenderer, ReinhardToneMapping, ACESFilmicToneMapping, Vector2, CameraHelper, PCFSoftShadowMap, BasicShadowMap, PCFShadowMap, VSMShadowMap, Mesh } from "three";
 import { LevelBuilder } from "./LevelBuilder";
 import { DEMO_01 } from "../levels/DEMO_01";
 import { IAnimated, Level, LevelParams } from "../types";
@@ -20,19 +20,21 @@ export class MainRenderer extends WebGLRenderer {
       antialias: true,
     });
 
-    this._sun = new DirectionalLight(0xF3BD5D, 10);
-    this._sun.add(new AmbientLight(0x2b8bff, 3));
+    this._sun = new DirectionalLight(0xF3BD5D, 1);
+    this._sun.add(new AmbientLight(0xF3BD8D, 3));
 
     this._scene = new Scene();
-    this._scene.fog = new FogExp2(0x888888, 0.02);
+    this._scene.fog = new FogExp2(0x808080, 0.2);
 
     this.shadowMap.enabled = true;
     this.shadowMap.type = PCFSoftShadowMap;
 
     this.setupLighting();
-    this.setClearColor(0x4b8bfd); // BLUE SKY
+    // this.setClearColor(0x4b8bfd); // BLUE SKY
     // this.setClearColor(0xF3BD5D); // EVENING
-    // this.setClearColor(0xbbbbbb);
+    // this.setClearColor(0x444454); // NIGHT
+    // this.setClearColor(0x6a81b3);
+    this.setClearColor(0x5a71a3);
 
     this.changeLevel(level, {spawnPosition: {x: 7, y: 34}});
   }
@@ -46,10 +48,10 @@ export class MainRenderer extends WebGLRenderer {
   }
 
   private setupLighting = () => {
-    this.toneMapping = ReinhardToneMapping;
-    this.toneMappingExposure = 0.3;
+    // this.toneMapping = ACESFilmicToneMapping;
+    // this.toneMappingExposure = 0.2;
 
-    this._sun.castShadow = true;
+    // this._sun.castShadow = true;
     this._sun.shadow.bias = .0000001;
     this._sun.shadow.camera.top = 10;
     this._sun.shadow.camera.bottom = -10;
@@ -85,6 +87,7 @@ export class MainRenderer extends WebGLRenderer {
   }
 
   public animate() {
+    this.time += 0.1;
 
     this._animateTargets.forEach((target) => target.animate());
 
@@ -96,6 +99,14 @@ export class MainRenderer extends WebGLRenderer {
       cameraWorldPosition.z - 15,
     );
     this._sun.target = this._camera;
+
+    this._scene.traverse((child) => {
+        if (child instanceof Mesh
+            && child.material.type === 'ShaderMaterial') {
+            child.material.uniforms.uTime.value = this.time;
+            child.material.needsUpdate = true;
+        }
+    });
 
     this.render(this._scene, this._camera);
   }

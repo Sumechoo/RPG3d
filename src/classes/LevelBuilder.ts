@@ -1,11 +1,9 @@
 import { Level, LevelAction, LevelParams, TileConfig, TileFormat } from "../types";
 import { MainRenderer } from "./MainRenderer";
 import { PlayerController } from "./PlayerController";
-import { Block } from "./Block";
-import { Vector3, SpriteMaterial, Vec2 } from "three";
+import { Vector3, Vec2 } from "three";
 import { IMAGE_ASSETS } from "../assets/images";
 import { getInMatrix, setInMatrix, matrixToNodes } from "./utils";
-import { Sprite } from "./Sprite";
 import { PathFinder } from "./PathFinder";
 import { Creature } from "./Creature";
 import { InstancedGeometry } from "./IstancedGeometry";
@@ -20,7 +18,7 @@ export const getGeometryResources = () => ({
     bush_02: new InstancedGeometry(IMAGE_ASSETS.bush2, 1, 10, true),
     corn: new InstancedGeometry(IMAGE_ASSETS.corn, 1, 1000, true),
 
-    wall: new InstancedGeometry(IMAGE_ASSETS.window_old, .1, 500, false, true, PrepareBoxGeometry),
+    wall: new InstancedGeometry(IMAGE_ASSETS.window_old, .1, 800, false, true, PrepareBoxGeometry),
     dirt: new InstancedGeometry(IMAGE_ASSETS.actual_grass, 1, 1100, false, true, PrepareBoxGeometry),
     asphalt: new InstancedGeometry(IMAGE_ASSETS.beton_wall, 1, 1100, false, true, PrepareBoxGeometry),
     fence: new InstancedGeometry(IMAGE_ASSETS.fence, 1, 200),
